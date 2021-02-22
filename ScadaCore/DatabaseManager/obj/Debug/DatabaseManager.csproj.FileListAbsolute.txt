@@ -1,0 +1,7 @@
+E:\FAKS\Snus Projekat\ScadaCore\DatabaseManager\bin\Debug\DatabaseManager.exe.config
+E:\FAKS\Snus Projekat\ScadaCore\DatabaseManager\bin\Debug\DatabaseManager.exe
+E:\FAKS\Snus Projekat\ScadaCore\DatabaseManager\bin\Debug\DatabaseManager.pdb
+E:\FAKS\Snus Projekat\ScadaCore\DatabaseManager\obj\Debug\DatabaseManager.csprojAssemblyReference.cache
+E:\FAKS\Snus Projekat\ScadaCore\DatabaseManager\obj\Debug\DatabaseManager.csproj.CoreCompileInputs.cache
+E:\FAKS\Snus Projekat\ScadaCore\DatabaseManager\obj\Debug\DatabaseManager.exe
+E:\FAKS\Snus Projekat\ScadaCore\DatabaseManager\obj\Debug\DatabaseManager.pdb

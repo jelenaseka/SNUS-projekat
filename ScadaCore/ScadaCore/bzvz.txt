@@ -1,0 +1,12 @@
+<Tags>
+  <Tag tag="input" type="digital" name="tag1" address="S" driver="SD" scanTime="2" onOffScan="true">Description1</Tag>
+  <Tag tag="input" type="digital" name="tag2" address="S" driver="RTD" scanTime="2" onOffScan="false">Description2</Tag>
+  <Tag tag="input" type="digital" name="tag11" address="S" driver="SD" scanTime="5" onOffScan="true">opis</Tag>
+  <Tag tag="input" type="analog" name="tag5" address="C" driver="SD" scanTime="3" onOffScan="true" lowLimit="10" highLimit="100">Description5</Tag>
+  <Tag tag="input" type="analog" name="tag45" address="T" driver="RTD" scanTime="3" onOffScan="true" lowLimit="1" highLimit="10">tagic</Tag>
+  <Tag tag="output" type="digital" name="tag3" address="C" initValue="4">Description3</Tag>
+  <Tag tag="output" type="digital" name="tag4" address="R" initValue="2">Description4</Tag>
+  <Tag tag="output" type="digital" name="tag10" address="R" initValue="3">Tagic opis</Tag>
+  <Tag tag="output" type="analog" name="tag7" address="C" initValue="4" lowLimit="10" highLimit="100">Description7</Tag>
+  <Tag tag="output" type="analog" name="tag8" address="C" initValue="1" lowLimit="10" highLimit="100">Description8</Tag>
+</Tags>

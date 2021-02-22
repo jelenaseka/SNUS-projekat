@@ -1,0 +1,6 @@
+E:\FAKS\Snus Projekat\ScadaCore\RealTimeUnit\bin\Debug\RealTimeUnit.exe.config
+E:\FAKS\Snus Projekat\ScadaCore\RealTimeUnit\bin\Debug\RealTimeUnit.exe
+E:\FAKS\Snus Projekat\ScadaCore\RealTimeUnit\bin\Debug\RealTimeUnit.pdb
+E:\FAKS\Snus Projekat\ScadaCore\RealTimeUnit\obj\Debug\RealTimeUnit.csproj.CoreCompileInputs.cache
+E:\FAKS\Snus Projekat\ScadaCore\RealTimeUnit\obj\Debug\RealTimeUnit.exe
+E:\FAKS\Snus Projekat\ScadaCore\RealTimeUnit\obj\Debug\RealTimeUnit.pdb

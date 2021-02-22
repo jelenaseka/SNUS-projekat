@@ -1,0 +1,17 @@
+E:\FAKS\Snus Projekat\ScadaCore\ScadaCore\bin\ScadaCore.dll.config
+E:\FAKS\Snus Projekat\ScadaCore\ScadaCore\bin\ScadaCore.dll
+E:\FAKS\Snus Projekat\ScadaCore\ScadaCore\bin\ScadaCore.pdb
+E:\FAKS\Snus Projekat\ScadaCore\ScadaCore\obj\Debug\ScadaCore.csproj.CoreCompileInputs.cache
+E:\FAKS\Snus Projekat\ScadaCore\ScadaCore\obj\Debug\ScadaCore.dll
+E:\FAKS\Snus Projekat\ScadaCore\ScadaCore\obj\Debug\ScadaCore.pdb
+E:\FAKS\Snus Projekat\ScadaCore\ScadaCore\bin\EntityFramework.dll
+E:\FAKS\Snus Projekat\ScadaCore\ScadaCore\bin\EntityFramework.SqlServer.dll
+E:\FAKS\Snus Projekat\ScadaCore\ScadaCore\bin\EntityFramework.xml
+E:\FAKS\Snus Projekat\ScadaCore\ScadaCore\bin\EntityFramework.SqlServer.xml
+E:\FAKS\Snus Projekat\ScadaCore\ScadaCore\obj\Debug\ScadaCore.csprojAssemblyReference.cache
+E:\FAKS\Snus Projekat\ScadaCore\ScadaCore\obj\Debug\ScadaCore.csproj.CopyComplete
+E:\FAKS\Snus Projekat\ScadaCore\ScadaCore\obj\Debug\ScadaCore.Migrations.InitialCreate.resources
+E:\FAKS\Snus Projekat\ScadaCore\ScadaCore\obj\Debug\ScadaCore.csproj.GenerateResource.cache
+E:\FAKS\Snus Projekat\ScadaCore\ScadaCore\obj\Debug\ScadaCore.Migrations.novamigracija.resources
+E:\FAKS\Snus Projekat\ScadaCore\ScadaCore\obj\Debug\ScadaCore.Migrations.change2.resources
+E:\FAKS\Snus Projekat\ScadaCore\ScadaCore\obj\Debug\ScadaCore.Migrations.addAlarms.resources
