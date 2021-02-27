@@ -22,10 +22,10 @@ namespace DatabaseManager.ServiceReference {
         System.Threading.Tasks.Task<bool> IsDatabaseEmptyAsync();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IDatabaseManagerService/ChangeOutputValue", ReplyAction="http://tempuri.org/IDatabaseManagerService/ChangeOutputValueResponse")]
-        bool ChangeOutputValue(string tagName, double value);
+        string ChangeOutputValue(string tagName, double value);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IDatabaseManagerService/ChangeOutputValue", ReplyAction="http://tempuri.org/IDatabaseManagerService/ChangeOutputValueResponse")]
-        System.Threading.Tasks.Task<bool> ChangeOutputValueAsync(string tagName, double value);
+        System.Threading.Tasks.Task<string> ChangeOutputValueAsync(string tagName, double value);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IDatabaseManagerService/GetOutputValues", ReplyAction="http://tempuri.org/IDatabaseManagerService/GetOutputValuesResponse")]
         System.Collections.Generic.Dictionary<string, double> GetOutputValues();
@@ -34,10 +34,10 @@ namespace DatabaseManager.ServiceReference {
         System.Threading.Tasks.Task<System.Collections.Generic.Dictionary<string, double>> GetOutputValuesAsync();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IDatabaseManagerService/TurnScanOnOff", ReplyAction="http://tempuri.org/IDatabaseManagerService/TurnScanOnOffResponse")]
-        bool TurnScanOnOff(string tagName, bool scan);
+        string TurnScanOnOff(string tagName);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IDatabaseManagerService/TurnScanOnOff", ReplyAction="http://tempuri.org/IDatabaseManagerService/TurnScanOnOffResponse")]
-        System.Threading.Tasks.Task<bool> TurnScanOnOffAsync(string tagName, bool scan);
+        System.Threading.Tasks.Task<string> TurnScanOnOffAsync(string tagName);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IDatabaseManagerService/Registration", ReplyAction="http://tempuri.org/IDatabaseManagerService/RegistrationResponse")]
         bool Registration(string username, string password, string role);
@@ -52,28 +52,40 @@ namespace DatabaseManager.ServiceReference {
         System.Threading.Tasks.Task<string> SignInAsync(string username, string password);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IDatabaseManagerService/AddOutputTag", ReplyAction="http://tempuri.org/IDatabaseManagerService/AddOutputTagResponse")]
-        bool AddOutputTag(string tagName, string desc, string address, double initVal, int lowLimit, int highLimit, string type);
+        string AddOutputTag(string tagName, string desc, string address, double initVal, double lowLimit, double highLimit, string type);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IDatabaseManagerService/AddOutputTag", ReplyAction="http://tempuri.org/IDatabaseManagerService/AddOutputTagResponse")]
-        System.Threading.Tasks.Task<bool> AddOutputTagAsync(string tagName, string desc, string address, double initVal, int lowLimit, int highLimit, string type);
+        System.Threading.Tasks.Task<string> AddOutputTagAsync(string tagName, string desc, string address, double initVal, double lowLimit, double highLimit, string type);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IDatabaseManagerService/AddInputTag", ReplyAction="http://tempuri.org/IDatabaseManagerService/AddInputTagResponse")]
-        bool AddInputTag(string tagName, string desc, string address, string driver, int scanTime, bool onOffScan, int lowLimit, int highLimit, string type);
+        string AddInputTag(string tagName, string desc, string address, string driver, int scanTime, bool onOffScan, double lowLimit, double highLimit, string type);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IDatabaseManagerService/AddInputTag", ReplyAction="http://tempuri.org/IDatabaseManagerService/AddInputTagResponse")]
-        System.Threading.Tasks.Task<bool> AddInputTagAsync(string tagName, string desc, string address, string driver, int scanTime, bool onOffScan, int lowLimit, int highLimit, string type);
+        System.Threading.Tasks.Task<string> AddInputTagAsync(string tagName, string desc, string address, string driver, int scanTime, bool onOffScan, double lowLimit, double highLimit, string type);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IDatabaseManagerService/RemoveInputTag", ReplyAction="http://tempuri.org/IDatabaseManagerService/RemoveInputTagResponse")]
-        bool RemoveInputTag(string tagName);
+        string RemoveInputTag(string tagName);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IDatabaseManagerService/RemoveInputTag", ReplyAction="http://tempuri.org/IDatabaseManagerService/RemoveInputTagResponse")]
-        System.Threading.Tasks.Task<bool> RemoveInputTagAsync(string tagName);
+        System.Threading.Tasks.Task<string> RemoveInputTagAsync(string tagName);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IDatabaseManagerService/RemoveOutputTag", ReplyAction="http://tempuri.org/IDatabaseManagerService/RemoveOutputTagResponse")]
-        bool RemoveOutputTag(string tagName);
+        string RemoveOutputTag(string tagName);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IDatabaseManagerService/RemoveOutputTag", ReplyAction="http://tempuri.org/IDatabaseManagerService/RemoveOutputTagResponse")]
-        System.Threading.Tasks.Task<bool> RemoveOutputTagAsync(string tagName);
+        System.Threading.Tasks.Task<string> RemoveOutputTagAsync(string tagName);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IDatabaseManagerService/AddAlarm", ReplyAction="http://tempuri.org/IDatabaseManagerService/AddAlarmResponse")]
+        string AddAlarm(string tagName, string type, double limit, int priority);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IDatabaseManagerService/AddAlarm", ReplyAction="http://tempuri.org/IDatabaseManagerService/AddAlarmResponse")]
+        System.Threading.Tasks.Task<string> AddAlarmAsync(string tagName, string type, double limit, int priority);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IDatabaseManagerService/DeleteAlarm", ReplyAction="http://tempuri.org/IDatabaseManagerService/DeleteAlarmResponse")]
+        string DeleteAlarm(string tagName);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IDatabaseManagerService/DeleteAlarm", ReplyAction="http://tempuri.org/IDatabaseManagerService/DeleteAlarmResponse")]
+        System.Threading.Tasks.Task<string> DeleteAlarmAsync(string tagName);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -111,11 +123,11 @@ namespace DatabaseManager.ServiceReference {
             return base.Channel.IsDatabaseEmptyAsync();
         }
         
-        public bool ChangeOutputValue(string tagName, double value) {
+        public string ChangeOutputValue(string tagName, double value) {
             return base.Channel.ChangeOutputValue(tagName, value);
         }
         
-        public System.Threading.Tasks.Task<bool> ChangeOutputValueAsync(string tagName, double value) {
+        public System.Threading.Tasks.Task<string> ChangeOutputValueAsync(string tagName, double value) {
             return base.Channel.ChangeOutputValueAsync(tagName, value);
         }
         
@@ -127,12 +139,12 @@ namespace DatabaseManager.ServiceReference {
             return base.Channel.GetOutputValuesAsync();
         }
         
-        public bool TurnScanOnOff(string tagName, bool scan) {
-            return base.Channel.TurnScanOnOff(tagName, scan);
+        public string TurnScanOnOff(string tagName) {
+            return base.Channel.TurnScanOnOff(tagName);
         }
         
-        public System.Threading.Tasks.Task<bool> TurnScanOnOffAsync(string tagName, bool scan) {
-            return base.Channel.TurnScanOnOffAsync(tagName, scan);
+        public System.Threading.Tasks.Task<string> TurnScanOnOffAsync(string tagName) {
+            return base.Channel.TurnScanOnOffAsync(tagName);
         }
         
         public bool Registration(string username, string password, string role) {
@@ -151,36 +163,52 @@ namespace DatabaseManager.ServiceReference {
             return base.Channel.SignInAsync(username, password);
         }
         
-        public bool AddOutputTag(string tagName, string desc, string address, double initVal, int lowLimit, int highLimit, string type) {
+        public string AddOutputTag(string tagName, string desc, string address, double initVal, double lowLimit, double highLimit, string type) {
             return base.Channel.AddOutputTag(tagName, desc, address, initVal, lowLimit, highLimit, type);
         }
         
-        public System.Threading.Tasks.Task<bool> AddOutputTagAsync(string tagName, string desc, string address, double initVal, int lowLimit, int highLimit, string type) {
+        public System.Threading.Tasks.Task<string> AddOutputTagAsync(string tagName, string desc, string address, double initVal, double lowLimit, double highLimit, string type) {
             return base.Channel.AddOutputTagAsync(tagName, desc, address, initVal, lowLimit, highLimit, type);
         }
         
-        public bool AddInputTag(string tagName, string desc, string address, string driver, int scanTime, bool onOffScan, int lowLimit, int highLimit, string type) {
+        public string AddInputTag(string tagName, string desc, string address, string driver, int scanTime, bool onOffScan, double lowLimit, double highLimit, string type) {
             return base.Channel.AddInputTag(tagName, desc, address, driver, scanTime, onOffScan, lowLimit, highLimit, type);
         }
         
-        public System.Threading.Tasks.Task<bool> AddInputTagAsync(string tagName, string desc, string address, string driver, int scanTime, bool onOffScan, int lowLimit, int highLimit, string type) {
+        public System.Threading.Tasks.Task<string> AddInputTagAsync(string tagName, string desc, string address, string driver, int scanTime, bool onOffScan, double lowLimit, double highLimit, string type) {
             return base.Channel.AddInputTagAsync(tagName, desc, address, driver, scanTime, onOffScan, lowLimit, highLimit, type);
         }
         
-        public bool RemoveInputTag(string tagName) {
+        public string RemoveInputTag(string tagName) {
             return base.Channel.RemoveInputTag(tagName);
         }
         
-        public System.Threading.Tasks.Task<bool> RemoveInputTagAsync(string tagName) {
+        public System.Threading.Tasks.Task<string> RemoveInputTagAsync(string tagName) {
             return base.Channel.RemoveInputTagAsync(tagName);
         }
         
-        public bool RemoveOutputTag(string tagName) {
+        public string RemoveOutputTag(string tagName) {
             return base.Channel.RemoveOutputTag(tagName);
         }
         
-        public System.Threading.Tasks.Task<bool> RemoveOutputTagAsync(string tagName) {
+        public System.Threading.Tasks.Task<string> RemoveOutputTagAsync(string tagName) {
             return base.Channel.RemoveOutputTagAsync(tagName);
+        }
+        
+        public string AddAlarm(string tagName, string type, double limit, int priority) {
+            return base.Channel.AddAlarm(tagName, type, limit, priority);
+        }
+        
+        public System.Threading.Tasks.Task<string> AddAlarmAsync(string tagName, string type, double limit, int priority) {
+            return base.Channel.AddAlarmAsync(tagName, type, limit, priority);
+        }
+        
+        public string DeleteAlarm(string tagName) {
+            return base.Channel.DeleteAlarm(tagName);
+        }
+        
+        public System.Threading.Tasks.Task<string> DeleteAlarmAsync(string tagName) {
+            return base.Channel.DeleteAlarmAsync(tagName);
         }
     }
 }

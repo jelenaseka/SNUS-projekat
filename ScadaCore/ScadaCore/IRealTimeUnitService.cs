@@ -11,9 +11,9 @@ namespace ScadaCore
     public interface IRealTimeUnitService
     {
         [OperationContract]
-        bool initialize(string id, string address);
+        bool Initialize(string id, string address, byte[] signature, string message);
 
         [OperationContract]
-        void sendValueToAddress(string address, int number);
+        void SendValueToAddress(string address, int number);
     }
 }

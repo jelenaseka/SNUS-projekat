@@ -29,5 +29,6 @@ namespace ScadaCore
         {
             return 10 * DateTime.Now.Second / 60;
         }
+        
     }
 }

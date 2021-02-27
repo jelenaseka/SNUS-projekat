@@ -24,7 +24,7 @@
   <xs:element name="ChangeOutputValueResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="ChangeOutputValueResult" type="xs:boolean" />
+        <xs:element minOccurs="0" name="ChangeOutputValueResult" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -44,14 +44,13 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="tagName" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="scan" type="xs:boolean" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="TurnScanOnOffResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="TurnScanOnOffResult" type="xs:boolean" />
+        <xs:element minOccurs="0" name="TurnScanOnOffResult" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -93,8 +92,8 @@
         <xs:element minOccurs="0" name="desc" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="address" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="initVal" type="xs:double" />
-        <xs:element minOccurs="0" name="lowLimit" type="xs:int" />
-        <xs:element minOccurs="0" name="highLimit" type="xs:int" />
+        <xs:element minOccurs="0" name="lowLimit" type="xs:double" />
+        <xs:element minOccurs="0" name="highLimit" type="xs:double" />
         <xs:element minOccurs="0" name="type" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
@@ -102,7 +101,7 @@
   <xs:element name="AddOutputTagResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="AddOutputTagResult" type="xs:boolean" />
+        <xs:element minOccurs="0" name="AddOutputTagResult" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -115,8 +114,8 @@
         <xs:element minOccurs="0" name="driver" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="scanTime" type="xs:int" />
         <xs:element minOccurs="0" name="onOffScan" type="xs:boolean" />
-        <xs:element minOccurs="0" name="lowLimit" type="xs:int" />
-        <xs:element minOccurs="0" name="highLimit" type="xs:int" />
+        <xs:element minOccurs="0" name="lowLimit" type="xs:double" />
+        <xs:element minOccurs="0" name="highLimit" type="xs:double" />
         <xs:element minOccurs="0" name="type" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
@@ -124,7 +123,7 @@
   <xs:element name="AddInputTagResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="AddInputTagResult" type="xs:boolean" />
+        <xs:element minOccurs="0" name="AddInputTagResult" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -138,7 +137,7 @@
   <xs:element name="RemoveInputTagResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="RemoveInputTagResult" type="xs:boolean" />
+        <xs:element minOccurs="0" name="RemoveInputTagResult" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -152,7 +151,38 @@
   <xs:element name="RemoveOutputTagResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="RemoveOutputTagResult" type="xs:boolean" />
+        <xs:element minOccurs="0" name="RemoveOutputTagResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="AddAlarm">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="tagName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="type" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="limit" type="xs:double" />
+        <xs:element minOccurs="0" name="priority" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="AddAlarmResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="AddAlarmResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeleteAlarm">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="tagName" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeleteAlarmResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="DeleteAlarmResult" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

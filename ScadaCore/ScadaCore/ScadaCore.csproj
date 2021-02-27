@@ -75,6 +75,7 @@
     <Content Include="AlarmDisplayService.svc" />
     <Content Include="DatabaseManagerService.svc" />
     <Content Include="RealTimeUnitService.svc" />
+    <Content Include="ReportManagerService.svc" />
     <Content Include="scadaConfig.xml" />
     <Content Include="TrendingService.svc" />
     <Content Include="Web.config" />
@@ -86,25 +87,12 @@
     </Compile>
     <Compile Include="IAlarmDisplayService.cs" />
     <Compile Include="IRealTimeUnitService.cs" />
-    <Compile Include="Migrations\202102161600161_InitialCreate.cs" />
-    <Compile Include="Migrations\202102161600161_InitialCreate.designer.cs">
-      <DependentUpon>202102161600161_InitialCreate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202102161725211_novamigracija.cs" />
-    <Compile Include="Migrations\202102161725211_novamigracija.designer.cs">
-      <DependentUpon>202102161725211_novamigracija.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202102201307163_change2.cs" />
-    <Compile Include="Migrations\202102201307163_change2.designer.cs">
-      <DependentUpon>202102201307163_change2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202102201349342_addAlarms.cs" />
-    <Compile Include="Migrations\202102201349342_addAlarms.designer.cs">
-      <DependentUpon>202102201349342_addAlarms.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="IReportManagerService.cs" />
     <Compile Include="RealTimeUnitService.svc.cs">
       <DependentUpon>RealTimeUnitService.svc</DependentUpon>
+    </Compile>
+    <Compile Include="ReportManagerService.svc.cs">
+      <DependentUpon>ReportManagerService.svc</DependentUpon>
     </Compile>
     <Compile Include="User.cs" />
     <Content Include="App_Code\Initializer.cs" />
@@ -135,20 +123,6 @@
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\202102161600161_InitialCreate.resx">
-      <DependentUpon>202102161600161_InitialCreate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202102161725211_novamigracija.resx">
-      <DependentUpon>202102161725211_novamigracija.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202102201307163_change2.resx">
-      <DependentUpon>202102201307163_change2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202102201349342_addAlarms.resx">
-      <DependentUpon>202102201349342_addAlarms.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -17,6 +17,6 @@ namespace ScadaCore
     public interface IAlarmDisplayServiceCallback
     {
         [OperationContract(IsOneWay = true)]
-        void OnAlarmInvoked(string alarm);
+        void OnAlarmInvoked(string alarm, int priority);
     }
 }

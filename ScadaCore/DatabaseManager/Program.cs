@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
+using System.Security.Cryptography;
 
 namespace DatabaseManager
 {
@@ -83,10 +84,10 @@ namespace DatabaseManager
                 Console.WriteLine("Pogresan unos.");
                 return;
             }
-
+            string encryptedPassword = EncryptData(password);
             string role = dbClient.IsDatabaseEmpty() ? "admin" : "moderator";
 
-            if (dbClient.Registration(username, password, role))
+            if (dbClient.Registration(username, encryptedPassword, role))
                 Console.WriteLine("Registracija uspesno obavljena.");
             else
                 Console.WriteLine("Registracija neuspesna.");
@@ -100,13 +101,17 @@ namespace DatabaseManager
             string password = Console.ReadLine();
             if (IsEmpty(username, password))
             {
-                Console.WriteLine("Pogresan unos.");
+                Console.WriteLine("Morate popuniti sva polja.");
                 return;
             }
-            role = dbClient.SignIn(username, password);
-            if (role != null)
+            
+            string response = dbClient.SignIn(username, password);
+            if (response == "admin" || response == "moderator")
+            {
                 signedIn = true;
-            else Console.WriteLine("Neuspesna prijava.");
+                role = response;
+            }
+            else Console.WriteLine(response);
         }
         private static void SignOut()
         {
@@ -123,10 +128,12 @@ namespace DatabaseManager
                 case 3: TurnScanOnOff(); break;
                 case 4: AddInputTag(); break;
                 case 5: AddOutputTag(); break;
-                case 7: RemoveInputTag(); break;
-                case 8: RemoveOutputTag(); break;
-                case 9: SignOut(); break;
-                case 10:
+                case 6: RemoveInputTag(); break;
+                case 7: RemoveOutputTag(); break;
+                case 8: AddAlarm(); break;
+                case 9: DeleteAlarm(); break;
+                case 10: SignOut(); break;
+                case 11:
                     if(role == "admin")
                     {
                         Registration();
@@ -138,33 +145,80 @@ namespace DatabaseManager
                 default: Console.WriteLine("Pogresan unos"); break;
             }
         }
+        private static void AddAlarm()
+        {
+            Console.WriteLine("Tag name za alarm:");
+            string tagName = Console.ReadLine();
+            Console.WriteLine("Tip(low/high): ");
+            string type = Console.ReadLine();
+            Console.WriteLine("Limit:");
+            double limit = ValidateDouble(Console.ReadLine());
+            Console.WriteLine("Priority:");
+            int priority = ValidateInt(Console.ReadLine());
+
+            if (!ValidateAlarmInput(type, limit, priority))
+            {
+                Console.WriteLine("Pogresan unos.");
+                return;
+            }
+
+            string response = dbClient.AddAlarm(tagName, type, limit, priority);
+            Console.WriteLine(response);
+        }
+        private static void DeleteAlarm()
+        {
+            Console.WriteLine("Id alarma:");
+            string id = Console.ReadLine();
+            string response = dbClient.DeleteAlarm(id);
+            Console.WriteLine(response);
+        }
+
+        private static double ValidateDouble(string number)
+        {
+            double doubleNumber;
+            bool isDouble = Double.TryParse(number, out doubleNumber);
+            if (isDouble)
+            {
+                return doubleNumber;
+            }
+            return -1;
+        }
+        private static int ValidateInt(string number)
+        {
+            int intNumber;
+            bool isInt = Int32.TryParse(number, out intNumber);
+            if (isInt)
+            {
+                return intNumber;
+            }
+            return -1;
+        }
+        private static bool ValidateAlarmInput(string type, double limit, int priority)
+        {
+            if ((type != "low" && type != "high") || limit == -1 || priority == -1)
+                return false;
+            
+            if (priority != 1 && priority != 2 && priority != 3)
+                return false;
+
+            return true;
+        }
+        
 
         private static void RemoveOutputTag()
         {
             Console.WriteLine("Unesite id taga:");
             string tagName = Console.ReadLine();
-            if (dbClient.RemoveOutputTag(tagName))
-            {
-                Console.WriteLine("Tag uspesno obrisan.");
-            }
-            else
-            {
-                Console.WriteLine("Neuspesno brisanje taga.");
-            }
+            string response = dbClient.RemoveOutputTag(tagName);
+            Console.WriteLine(response);
         }
 
         private static void RemoveInputTag()
         {
             Console.WriteLine("Unesite id taga:");
             string tagName = Console.ReadLine();
-            if(dbClient.RemoveInputTag(tagName))
-            {
-                Console.WriteLine("Tag uspesno obrisan.");
-            }
-            else
-            {
-                Console.WriteLine("Neuspesno brisanje taga.");
-            }
+            string response = dbClient.RemoveInputTag(tagName);
+            Console.WriteLine(response);
         }
 
         private static void AddOutputTag()
@@ -196,6 +250,11 @@ namespace DatabaseManager
             }
             else
             {
+                if(initValue != 0 && initValue != 1)
+                {
+                    Console.WriteLine("Pocetna vrednost moze biti samo 0 ili 1.");
+                    return;
+                }
                 AddDigitalOutput(tagName, description, address, initValue);
             }
         }
@@ -203,36 +262,28 @@ namespace DatabaseManager
         private static void AddAnalogOutput(string tagName, string description, string address, double initValue)
         {
             Console.WriteLine("Low limit:");
-            int lowLimit;
-
-            int highLimit;
-            bool lowLimitSuccess = Int32.TryParse(Console.ReadLine(), out lowLimit);
+            double lowLimit = ValidateDouble(Console.ReadLine());
             Console.WriteLine("High limit:");
-            bool highLimitSuccess = Int32.TryParse(Console.ReadLine(), out highLimit);
-            if (!(lowLimitSuccess && highLimitSuccess))
+            double highLimit = ValidateDouble(Console.ReadLine());
+           
+            if (lowLimit == -1 || highLimit == -1 || lowLimit > highLimit)
             {
                 Console.WriteLine("Pogresan unos");
                 return;
             }
-            if(dbClient.AddOutputTag(tagName, description, address, initValue, lowLimit, highLimit, "analog"))
+            if(initValue > highLimit || initValue < lowLimit)
             {
-                Console.WriteLine("Tag uspesno dodat.");
-            } else
-            {
-                Console.WriteLine("Neuspesno dodavanje taga.");
+                Console.WriteLine("Pocetna vrednost treba biti izmedju low i high limita.");
+                return;
             }
+            string response = dbClient.AddOutputTag(tagName, description, address, initValue, lowLimit, highLimit, "analog");
+            Console.WriteLine(response);
         }
 
         private static void AddDigitalOutput(string tagName, string description, string address, double initValue)
         {
-            if(dbClient.AddOutputTag(tagName, description, address, initValue, 0, 0, "digital"))
-            {
-                Console.WriteLine("Tag uspesno dodat.");
-            }
-            else
-            {
-                Console.WriteLine("Neuspesno dodavanje taga.");
-            }
+            string response = dbClient.AddOutputTag(tagName, description, address, initValue, 0, 0, "digital");
+            Console.WriteLine(response);
         }
 
         private static void AddInputTag()
@@ -257,6 +308,11 @@ namespace DatabaseManager
             Console.WriteLine("Scan time:");
             int scanTime;
             bool scanTimeSuccess = Int32.TryParse(Console.ReadLine(), out scanTime);
+            if(scanTime < 1)
+            {
+                Console.WriteLine("Scan time mora biti veci od 0");
+                return;
+            }
             Console.WriteLine("On/Off scan:");
             bool onOffScan;
             bool onOffSuccess = Boolean.TryParse(Console.ReadLine(), out onOffScan);
@@ -283,13 +339,8 @@ namespace DatabaseManager
 
         private static void AddDigitalInput(string tagName, string description, string address, string driver, int scanTime, bool onOffScan)
         {
-            if(dbClient.AddInputTag(tagName, description, address, driver, scanTime, onOffScan, 0, 0, "digital"))
-            {
-                Console.WriteLine("Uspesno dodavanje taga.");
-            } else
-            {
-                Console.WriteLine("Tag sa tim id-jem vec postoji.");
-            }
+            string response = dbClient.AddInputTag(tagName, description, address, driver, scanTime, onOffScan, 0, 0, "digital");
+            Console.WriteLine(response);
         }
 
         private static void AddAnalogInput(string tagName, string description, string address, string driver, int scanTime, bool onOffScan)
@@ -305,37 +356,17 @@ namespace DatabaseManager
                 Console.WriteLine("Pogresan unos");
                 return;
             }
-            if(dbClient.AddInputTag(tagName, description, address, driver, scanTime, onOffScan, lowLimit, highLimit, "analog"))
-            {
-                Console.WriteLine("Uspesno dodavanje taga.");
-            }
-            else
-            {
-                Console.WriteLine("Tag sa tim id-jem vec postoji.");
-            }
+            string response = dbClient.AddInputTag(tagName, description, address, driver, scanTime, onOffScan, lowLimit, highLimit, "analog");
+            Console.WriteLine(response);
         }
 
         private static void TurnScanOnOff()
         {
             Console.WriteLine("Unesite id ulaznog taga:");
             string tagName = Console.ReadLine();
-            Console.WriteLine("Postavite vrednost:");
-            bool onOff;
-            bool success = Boolean.TryParse(Console.ReadLine(), out onOff);
-            if (success)
-            {
-                if (dbClient.TurnScanOnOff(tagName, onOff))
-                {
-                    Console.WriteLine("Uspesno izmenjen on/off scan taga");
-                }
-                else
-                {
-                    Console.WriteLine("Neuspesno.");
-                }
-            } else
-            {
-                Console.WriteLine("Pogresan unos.");
-            }
+            
+            string response = dbClient.TurnScanOnOff(tagName);
+            Console.WriteLine(response);
         }
         private static void GetOutputValues()
         {
@@ -343,7 +374,7 @@ namespace DatabaseManager
             
             foreach (KeyValuePair<string, double> kvp in values)
             {
-                Console.WriteLine($"TagName = {kvp.Key}, Value = {kvp.Value}");
+                Console.WriteLine($"Address = {kvp.Key}, Value = {kvp.Value}");
             }
         }
         private static void ChangeOutputValue()
@@ -351,22 +382,16 @@ namespace DatabaseManager
             Console.WriteLine("Unesite id taga:");
             string tagName = Console.ReadLine();
             Console.WriteLine("Unesite novu vrednost:");
-            double newValue;
-            if (Double.TryParse(Console.ReadLine(), out newValue))
-            {
-                if (dbClient.ChangeOutputValue(tagName, newValue))
-                {
-                    Console.WriteLine("Uspesna izmena vrednosti.");
-                }
-                else
-                {
-                    Console.WriteLine("Neuspesna izmena vrednosti. Id taga ne postoji.");
-                }
-            }
-            else
+            double newValue = ValidateDouble(Console.ReadLine());
+            
+            if(newValue == -1)
             {
                 Console.WriteLine("Pogresan unos.");
+                return;
             }
+
+            string response = dbClient.ChangeOutputValue(tagName, newValue);
+            Console.WriteLine(response);
         }
         private static void PrintRegisterMenu()
         {
@@ -389,74 +414,47 @@ namespace DatabaseManager
             Console.WriteLine("3. Ukljucivanje/Iskljucivanje skeniranja ulaznih tagova");
             Console.WriteLine("4. Dodavanje ulaznog taga");
             Console.WriteLine("5. Dodavanje izlaznog taga");
-            Console.WriteLine("6. Izmena izlaznog taga");
-            Console.WriteLine("7. Brisanje ulaznog taga");
-            Console.WriteLine("8. Brisanje izlaznog taga");
-            Console.WriteLine("9. Odjava");
+            Console.WriteLine("6. Brisanje ulaznog taga");
+            Console.WriteLine("7. Brisanje izlaznog taga");
+            Console.WriteLine("8. Dodavanje alarma");
+            Console.WriteLine("9. Brisanje alarma");
+            Console.WriteLine("10. Odjava");
             if (role == "admin")
-                Console.WriteLine("10. Registracija korisnika");
+                Console.WriteLine("11. Registracija korisnika");
             Console.WriteLine("0 <-- EXIT");
         }
         private static bool IsEmpty(params string[] list)
         {
             for (int i = 0; i < list.Length; i++)
             {
-                //napraviti kasnije proveru za neke karaktere npr !?
                 if (list[i].Trim() == "")
                     return true;
             }
             return false;
         }
-        
-        
-        //static void deleteAlarm()
-        //{
-        //    Console.WriteLine("Tag name za alarm:");
-        //    string tagName = Console.ReadLine();
-        //    dbClient.deleteAlarm(tagName);
-        //}
-        //static void addAlarm()
-        //{
-        //    Console.WriteLine("Tag name za alarm:");
-        //    string tagName = Console.ReadLine();
-        //    Console.WriteLine("Tip: ");
-        //    string type = Console.ReadLine();
-        //    Console.WriteLine("Limit:");
-        //    double limit;
-        //    bool success = Double.TryParse(Console.ReadLine(), out limit);
-        //    if(!success)
-        //    {
-        //        Console.WriteLine("Pogresan unos.");
-        //        return;
-        //    }
-        //    int priority;
-        //    bool successp = Int32.TryParse(Console.ReadLine(), out priority);
-        //    if(!successp)
-        //    {
-        //        Console.WriteLine("Pogresan unos.");
-        //        return;
-        //    }
-        //    dbClient.addAlarm(tagName, type, limit, priority, DateTime.Now);
-        //}
-        
-        
-        //static void editOutputTag()
-        //{
-        //    Console.WriteLine("Unesite id taga:");
-        //    string tagName = Console.ReadLine();
-        //    string tagType = dbClient.getOutputTag(tagName);
-        //    if (tagType == null)
-        //    {
-        //        Console.WriteLine("Ne postoji ovaj tag");
-        //        return;
-        //    }
 
-        //    Console.WriteLine("I/O Adresa:");
-        //    string address = Console.ReadLine();
-
-        //    dbClient.editOutputTag(tagName, address);
-
-        //}
+        private static string EncryptData(string valueToEncrypt)
+        {
+            string GenerateSalt()
+            {
+                RNGCryptoServiceProvider crypto = new RNGCryptoServiceProvider();
+                byte[] salt = new byte[32];
+                crypto.GetBytes(salt);
+                return Convert.ToBase64String(salt);
+            }
+            string EncryptValue(string strValue)
+            {
+                string saltValue = GenerateSalt();
+                byte[] saltedPassword = Encoding.UTF8.GetBytes(saltValue + strValue);
+                using (SHA256Managed sha = new SHA256Managed())
+                {
+                    byte[] hash = sha.ComputeHash(saltedPassword);
+                    return $"{Convert.ToBase64String(hash)}:{saltValue}";
+                }
+            }
+            return EncryptValue(valueToEncrypt);
+        }
         
+
     }
 }

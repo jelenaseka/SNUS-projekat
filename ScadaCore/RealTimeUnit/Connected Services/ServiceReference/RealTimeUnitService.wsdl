@@ -6,32 +6,32 @@
       <xsd:import schemaLocation="http://localhost:58140/RealTimeUnitService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
     </xsd:schema>
   </wsdl:types>
-  <wsdl:message name="IRealTimeUnitService_initialize_InputMessage">
-    <wsdl:part name="parameters" element="tns:initialize" />
+  <wsdl:message name="IRealTimeUnitService_Initialize_InputMessage">
+    <wsdl:part name="parameters" element="tns:Initialize" />
   </wsdl:message>
-  <wsdl:message name="IRealTimeUnitService_initialize_OutputMessage">
-    <wsdl:part name="parameters" element="tns:initializeResponse" />
+  <wsdl:message name="IRealTimeUnitService_Initialize_OutputMessage">
+    <wsdl:part name="parameters" element="tns:InitializeResponse" />
   </wsdl:message>
-  <wsdl:message name="IRealTimeUnitService_sendValueToAddress_InputMessage">
-    <wsdl:part name="parameters" element="tns:sendValueToAddress" />
+  <wsdl:message name="IRealTimeUnitService_SendValueToAddress_InputMessage">
+    <wsdl:part name="parameters" element="tns:SendValueToAddress" />
   </wsdl:message>
-  <wsdl:message name="IRealTimeUnitService_sendValueToAddress_OutputMessage">
-    <wsdl:part name="parameters" element="tns:sendValueToAddressResponse" />
+  <wsdl:message name="IRealTimeUnitService_SendValueToAddress_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SendValueToAddressResponse" />
   </wsdl:message>
   <wsdl:portType name="IRealTimeUnitService">
-    <wsdl:operation name="initialize">
-      <wsdl:input wsaw:Action="http://tempuri.org/IRealTimeUnitService/initialize" message="tns:IRealTimeUnitService_initialize_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IRealTimeUnitService/initializeResponse" message="tns:IRealTimeUnitService_initialize_OutputMessage" />
+    <wsdl:operation name="Initialize">
+      <wsdl:input wsaw:Action="http://tempuri.org/IRealTimeUnitService/Initialize" message="tns:IRealTimeUnitService_Initialize_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IRealTimeUnitService/InitializeResponse" message="tns:IRealTimeUnitService_Initialize_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="sendValueToAddress">
-      <wsdl:input wsaw:Action="http://tempuri.org/IRealTimeUnitService/sendValueToAddress" message="tns:IRealTimeUnitService_sendValueToAddress_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IRealTimeUnitService/sendValueToAddressResponse" message="tns:IRealTimeUnitService_sendValueToAddress_OutputMessage" />
+    <wsdl:operation name="SendValueToAddress">
+      <wsdl:input wsaw:Action="http://tempuri.org/IRealTimeUnitService/SendValueToAddress" message="tns:IRealTimeUnitService_SendValueToAddress_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IRealTimeUnitService/SendValueToAddressResponse" message="tns:IRealTimeUnitService_SendValueToAddress_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_IRealTimeUnitService" type="tns:IRealTimeUnitService">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
-    <wsdl:operation name="initialize">
-      <soap:operation soapAction="http://tempuri.org/IRealTimeUnitService/initialize" style="document" />
+    <wsdl:operation name="Initialize">
+      <soap:operation soapAction="http://tempuri.org/IRealTimeUnitService/Initialize" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -39,8 +39,8 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="sendValueToAddress">
-      <soap:operation soapAction="http://tempuri.org/IRealTimeUnitService/sendValueToAddress" style="document" />
+    <wsdl:operation name="SendValueToAddress">
+      <soap:operation soapAction="http://tempuri.org/IRealTimeUnitService/SendValueToAddress" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>

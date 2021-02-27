@@ -1,3 +1,6 @@
 <Alarms>
-  <Alarm type="low" tagName="tag5" priority="1" time="2/16/2021 8:07:35 PM">2</Alarm>
+  <Alarm type="low" tagName="tag5" priority="1">2</Alarm>
+  <Alarm type="high" tagName="tag12" priority="2">7</Alarm>
+  <Alarm type="high" tagName="tag12" priority="2">7.9</Alarm>
+  <Alarm type="high" tagName="tag5" priority="2">8.8</Alarm>
 </Alarms>

@@ -11,10 +11,15 @@ namespace AlarmDisplay
 {
     public class AlarmDisplayCallback : IAlarmDisplayServiceCallback
     {
-        public void OnAlarmInvoked(string alarm)
+        public void OnAlarmInvoked(string alarm, int priority)
         {
-            Console.WriteLine(alarm);
+            for(int i = 0; i < priority; i++)
+            {
+                Console.WriteLine(alarm);
+            }
+            Console.WriteLine("-------------------------------------------------------------------------------------------------------");
         }
+        
     }
     class Program
     {

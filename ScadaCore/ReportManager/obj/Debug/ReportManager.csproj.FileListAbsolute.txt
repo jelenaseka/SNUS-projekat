@@ -1,0 +1,7 @@
+E:\FAKS\Snus Projekat\ScadaCore\ReportManager\bin\Debug\ReportManager.exe.config
+E:\FAKS\Snus Projekat\ScadaCore\ReportManager\bin\Debug\ReportManager.exe
+E:\FAKS\Snus Projekat\ScadaCore\ReportManager\bin\Debug\ReportManager.pdb
+E:\FAKS\Snus Projekat\ScadaCore\ReportManager\obj\Debug\ReportManager.csprojAssemblyReference.cache
+E:\FAKS\Snus Projekat\ScadaCore\ReportManager\obj\Debug\ReportManager.csproj.CoreCompileInputs.cache
+E:\FAKS\Snus Projekat\ScadaCore\ReportManager\obj\Debug\ReportManager.exe
+E:\FAKS\Snus Projekat\ScadaCore\ReportManager\obj\Debug\ReportManager.pdb

@@ -13,11 +13,13 @@ namespace ScadaCore
     {
         public delegate void ChangeInputTagDelegate(string input, double value);
         public static event ChangeInputTagDelegate inputChanged;
-        public delegate void AlarmCalledDelegate(string alarm);
+        public delegate void AlarmCalledDelegate(string alarm, int priority);
         public static event AlarmCalledDelegate alarmCalled;
         public static Dictionary<string, Thread> inputTagThreads = new Dictionary<string, Thread>();
         public static Dictionary<string, Input> inputTags = new Dictionary<string, Input>();
         public static Dictionary<string, Output> outputTags = new Dictionary<string, Output>();
+        public static Dictionary<string, double> outputValues = new Dictionary<string, double>();
+        public static Dictionary<string, Alarm> alarms = new Dictionary<string, Alarm>();
         public static DatabaseContext databaseContext = new DatabaseContext();
         public static readonly object locker = new object();
 
@@ -35,24 +37,12 @@ namespace ScadaCore
             {
                 while (true)
                 {
-                    lock(locker)
+                    lock (locker)
                     {
                         databaseContext.SaveChanges();
-                        //using (StreamWriter sw = File.AppendText(HostingEnvironment.ApplicationPhysicalPath + "\\bzvz.txt"))
-                        //{
-                        //    foreach (var val in databaseContext.Values)
-                        //    {
-                        //        sw.WriteLine($"Tag: {val.Tag}, Type: {val.Type}, Tag name: {val.TagName}, Time: {val.Time}, Value: {val.Value}");
-                        //    }
-                        //    sw.WriteLine("----------------------------------------------------");
-                        //    foreach(var alarm in databaseContext.Alarms)
-                        //    {
-                        //        sw.WriteLine(alarm.Id);
-                        //    }
-                        //}
                     }
 
-                    Thread.Sleep(10000);
+                    Thread.Sleep(5000);
                 }
             });
             t.Start();
@@ -69,6 +59,37 @@ namespace ScadaCore
             return true;
         }
 
+        internal static string ChangeOutputValue(string tagName, double value)
+        {
+            Output o = outputTags[tagName];
+
+            if (o.GetType() == typeof(DigitalOutput))
+            {
+                if (value != 0 && value != 1)
+                {
+                    return "Pocetna vrednost moze biti samo 0 ili 1.";
+                }
+            }
+            else
+            {
+                AnalogOutput ao = (AnalogOutput)o;
+                if (value > ao.HighLimit || value < ao.LowLimit)
+                {
+                    return "Pocetna vrednost mora biti izmedju low i high limita.";
+                }
+            }
+
+            TagValue tagValue = new TagValue { TagName = tagName, Time = DateTime.Now, Value = value, Tag = "output", Type = o.Type };
+            using (var db = new DatabaseContext())
+            {
+                db.Values.Add(tagValue);
+                db.SaveChanges();
+            }
+
+            outputValues[o.IOAddress] = value;
+            return "Uspesna izmena vrednosti.";
+        }
+
         public static void InvokeInputChanged(string input, double value)
         {
             inputChanged?.Invoke(input, value);
@@ -76,25 +97,36 @@ namespace ScadaCore
 
         public static void DoWork(Input input)
         {
+            //input.OldValue = -100;
             while (true)
             {
                 bool onOffScan = inputTags[input.TagName].OnOffScan;
                 if (onOffScan)
                 {
                     double value = ReadValueFromDriver(input);
+                    
                     lock (locker)
                     {
-
-                        var checkTag = databaseContext.Values
-                                    .Where(tag => tag.TagName == input.TagName)
-                                    .FirstOrDefault();
                         
-                        checkTag.Value = value;
-
                         if (input.GetType() == typeof(AnalogInput))
                         {
+                            AnalogInput ai = (AnalogInput)input;
+
+                            value = value < ai.LowLimit ? ai.LowLimit : value;
+                            value = value > ai.HighLimit ? ai.HighLimit : value;
+
+                            
                             CheckAlarm(input, value);
+                        } else
+                        {
+                            value = value < 0.5 ? 0 : 1;
                         }
+                        //if(value != input.OldValue)
+                        //{
+                        //    input.OldValue = value;
+                            TagValue tagValue = new TagValue { TagName = input.TagName, Time = DateTime.Now, Value = value, Tag = "input", Type = input.Type };
+                            databaseContext.Values.Add(tagValue);
+                        //}
                     }
 
                     InvokeInputChanged(input.TagName, value);
@@ -103,28 +135,7 @@ namespace ScadaCore
                 Thread.Sleep(input.ScanTime * 1000);
             }
         }
-        public static void AddInputTagToDatabase(Input tag)
-        {
-            lock (locker)
-            {
-                var checkTag = databaseContext.Values
-                                    .Where(tag1 => tag1.TagName == tag.TagName)
-                                    .FirstOrDefault();
-                TagValue tagValue = new TagValue { TagName = tag.TagName, Time = DateTime.Now, Value = 0, Tag = "input", Type = tag.Type };
-                if (checkTag == null)
-                {
-                    databaseContext.Values.Add(tagValue);
-                }
-                databaseContext.SaveChanges();
-            }
-        }
-        public static void AddInputTagsToDatabase()
-        {
-            foreach(var tag in inputTags.Values)
-            {
-                AddInputTagToDatabase(tag);
-            }
-        }
+        
         public static Thread AddInputTag(Input input)
         {
             inputTags.Add(input.TagName, input);
@@ -135,122 +146,110 @@ namespace ScadaCore
             inputTagThreads.Add(input.TagName, t);
             return t;
         }
-        private static void InvokeAlarm(Alarm alarm, double value)
+        private static void InvokeAlarm(AlarmValue alarm)
         {
-            alarmCalled?.Invoke($"Tag: {alarm.TagName}, Alarm type: {alarm.Type}, Alarm limit: {alarm.Limit}, value: {value}, Time {alarm.Time}");
+            alarmCalled?.Invoke($"Tag: {alarm.TagName}, Alarm type: {alarm.Type}, Alarm limit: {alarm.Limit}, Trigger Value: {alarm.TriggerValue}, Time {alarm.Time}", alarm.Priority);
         }
         private static void CheckAlarm(Input analogInput, double value)
         {
-            foreach(var alarm in databaseContext.Alarms)
+            using (var db = new DatabaseContext())
             {
-                if(alarm.TagName == analogInput.TagName)
+                foreach (var alarm in alarms.Values)
                 {
-                    if(alarm.Type == "low" && value <= alarm.Limit)
+                    if (alarm.TagName == analogInput.TagName)
                     {
-                        InvokeAlarm(alarm, value);
-                    } else if(alarm.Type == "high" && value >= alarm.Limit)
-                    {
-                        InvokeAlarm(alarm, value);
+                        if (alarm.Type == "low" && value <= alarm.Limit)
+                        {
+                            var alarmValue = new AlarmValue(alarm.Type, alarm.Priority, alarm.TagName, alarm.Limit, DateTime.Now, value);
+                            db.Alarms.Add(alarmValue);
+                            
+                            InvokeAlarm(alarmValue);
+                            WriteAlarmsLog(alarmValue);
+                        }
+                        else if (alarm.Type == "high" && value >= alarm.Limit)
+                        {
+                            var alarmValue = new AlarmValue(alarm.Type, alarm.Priority, alarm.TagName, alarm.Limit, DateTime.Now, value);
+                            db.Alarms.Add(alarmValue);
+
+                            InvokeAlarm(alarmValue);
+                            WriteAlarmsLog(alarmValue);
+                        }
                     }
+                    
                 }
+                db.SaveChanges();
+            }
+        }
+
+        private static void WriteAlarmsLog(AlarmValue alarmValue)
+        {
+            lock (locker)
+            {
                 using (StreamWriter sw = File.AppendText(HostingEnvironment.ApplicationPhysicalPath + "\\alarmsLog.txt"))
                 {
-                    sw.WriteLine($"Tag: {alarm.TagName}, Alarm type: {alarm.Type}, Alarm limit: {alarm.Limit}, value: {value}, Time {alarm.Time}");
+                    using (var db = new DatabaseContext())
+                    {
+                        sw.WriteLine($"Tag: {alarmValue.TagName}, Alarm type: {alarmValue.Type}, Alarm limit: {alarmValue.Limit}, value: {alarmValue.TriggerValue}, Time {alarmValue.Time}");
+                    }
                 }
-                
             }
-
         }
+
         public static void AddAlarm(Alarm alarm)
         {
-            var checkAlarm = databaseContext.Alarms
-                                    .Where(alarm1 => alarm1.Id == (alarm.TagName + alarm.Type + alarm.Limit))
-                                    .FirstOrDefault();
-            if(checkAlarm == null)
-            {
-                databaseContext.Alarms.Add(alarm);
-                databaseContext.SaveChanges();
-            }
-            
+            string id = alarm.TagName + alarm.Type + alarm.Limit;
+            alarms.Add(id, alarm);
         }
 
-        
+        public static void RemoveAlarm(string id)
+        {
+            alarms.Remove(id);
+        }
+
         public static void AddOutputTag(Output output)
         {
             outputTags.Add(output.TagName, output);
+            if(!outputValues.ContainsKey(output.IOAddress))
+            {
+                outputValues.Add(output.IOAddress, output.InitialValue);
+            }
+            
             TagValue tagValue = new TagValue { TagName = output.TagName, Time = DateTime.Now, Value = output.InitialValue, Tag = "output", Type = output.Type };
-            lock (locker)
+            using (var db = new DatabaseContext())
             {
-                var checkTag = databaseContext.Values
-                                    .Where(tag => tag.TagName == output.TagName)
-                                    .FirstOrDefault();
-                
-                if (checkTag == null)
-                {
-                    databaseContext.Values.Add(tagValue);
-                    databaseContext.SaveChanges();
-                }
+                db.Values.Add(tagValue);
+                db.SaveChanges();
             }
-            
-            
         }
 
-        internal static bool RemoveOutputTag(string tagName)
+        public static void RemoveOutputTag(string tagName)
         {
-            if (!outputTags.ContainsKey(tagName))
-            {
-                return false;
-            }
             outputTags.Remove(tagName);
-            lock (locker)
-            {
-                var tag = databaseContext.Values
-                            .Where(t => t.TagName == tagName)
-                            .FirstOrDefault();
-                databaseContext.Values.Remove(tag);
-                databaseContext.SaveChanges();
-            }
             WriteScadaConfig();
-            return true;
         }
 
-        public static bool RemoveInputTag(string tagName)
+        public static void RemoveInputTag(string tagName)
         {
-            if(!inputTags.ContainsKey(tagName))
-            {
-                return false;
-            }
             inputTags.Remove(tagName);
             inputTagThreads[tagName].Abort();
             inputTagThreads.Remove(tagName);
 
-            lock (locker)
-            {
-                var tag = databaseContext.Values
-                            .Where(t => t.TagName == tagName)
-                            .FirstOrDefault();
-                databaseContext.Values.Remove(tag);
-                databaseContext.SaveChanges();
-            }
-
             List<Alarm> tagAlarms = GetTagAlarms(tagName);
             foreach (var alarm in tagAlarms)
             {
-                RemoveAlarm(alarm.Id);
+                RemoveAlarm(alarm.TagName + alarm.Type + alarm.Limit);
             }
             
             WriteScadaConfig();
-            return true;
         }
 
         private static List<Alarm> GetTagAlarms(string tagName)
         {
             List<Alarm> tagAlarms = new List<Alarm>();
-            lock(locker)
+            
+            foreach(var alarm in alarms.Values)
             {
-                var alarms = databaseContext.Alarms
-                        .Where(a => a.TagName == tagName);
-                foreach(var alarm in alarms)
+                if(alarm.TagName == tagName)
                 {
                     tagAlarms.Add(alarm);
                 }
@@ -258,19 +257,7 @@ namespace ScadaCore
             return tagAlarms;
         }
 
-        private static void RemoveAlarm(string id)
-        {
-            lock(locker)
-            {
-                var alarm = databaseContext.Alarms
-                        .Where(a => a.Id == id)
-                        .FirstOrDefault();
-                databaseContext.Alarms.Remove(alarm);
-                databaseContext.SaveChanges();
-            }
-            
-            WriteAlarmConfig();
-        }
+        
 
         public static double ReadValueFromDriver(Input input)
         {
@@ -346,109 +333,23 @@ namespace ScadaCore
                 sw.Write(scadaXML);
             }
         }
-        //public static void UpdateScadaConfig(string tagName, string attribute, string value)
-        //{
-        //    XElement oldScadaXML = XElement.Load(HostingEnvironment.ApplicationPhysicalPath + "\\scadaConfig.xml");
-        //    var oldTags = oldScadaXML.Descendants("Tag");
-        //    //oldScadaXML.Add(new XElement("Tag"));
-        //    foreach (var elem in oldTags)
-        //    {
-        //        if (elem.Attribute("name").Value == tagName)
-        //        {
-        //            elem.Attribute(attribute).Value = value;
-        //        }
-        //    }
-        //    XElement scadaXML = new XElement("Tags", oldTags);
-        //    using (StreamWriter sw = File.CreateText(HostingEnvironment.ApplicationPhysicalPath + "\\scadaConfig.xml"))
-        //    {
-        //        sw.Write(scadaXML);
-        //    }
-        //}
+        
         public static void WriteAlarmConfig()
         {
-            List<Alarm> alarmList = new List<Alarm>();
-            lock(locker)
-            {
-                var alarms = databaseContext.Alarms;
-                foreach (var alarm in alarms)
-                {
-                    alarmList.Add(alarm);
-                }
-            }
+            List<AlarmValue> alarmList = new List<AlarmValue>();
             
             XElement alarmXML = new XElement("Alarms",
-                from alarm in databaseContext.Alarms.ToArray()
+                from alarm in alarms.Values
                 select new XElement("Alarm", alarm.Limit, new XAttribute("type", alarm.Type),
-                                                          new XAttribute("tagName", alarm.TagName),
-                                                          new XAttribute("priority", alarm.Priority),
-                                                          new XAttribute("time", alarm.Time.ToString())));
+                                                            new XAttribute("tagName", alarm.TagName),
+                                                            new XAttribute("priority", alarm.Priority)
+                                                            ));
+            
             using (StreamWriter sw = File.CreateText(HostingEnvironment.ApplicationPhysicalPath + "\\alarmConfig.xml"))
             {
                 sw.Write(alarmXML);
             }
         }
         
-        //public static void writeScadaConfig()
-        //{
-        //    List<AnalogInput> analogInputList = new List<AnalogInput>();
-        //    List<AnalogOutput> analogOutputList = new List<AnalogOutput>();
-
-        //    foreach (DigitalInput di in inputTags.Values)
-        //    {
-        //        if (di.GetType() == typeof(AnalogInput))
-        //        {
-        //            analogInputList.Add((AnalogInput)di);
-        //        }
-        //    }
-
-        //    foreach (DigitalOutput doo in outputTags.Values)
-        //    {
-        //        if (doo.GetType() == typeof(AnalogOutput))
-        //        {
-        //            analogOutputList.Add((AnalogOutput)doo);
-        //        }
-        //    }
-
-        //    XElement scadaXML = new XElement("Tags",
-        //        from input in inputTags
-        //        where input.Value.Tag == "digital"
-        //        select new XElement("Tag", input.Value.Description, new XAttribute("type", "input"),
-        //                                                            new XAttribute("tag", input.Value.Tag),
-        //                                                            new XAttribute("name", input.Value.TagName),
-        //                                                            new XAttribute("address", input.Value.IOAddress),
-        //                                                            new XAttribute("driver", input.Value.Driver),
-        //                                                            new XAttribute("scanTime", input.Value.ScanTime),
-        //                                                            new XAttribute("onOffScan", input.Value.OnOffScan)),
-        //        from input2 in analogInputList
-        //        select new XElement("Tag", input2.Description, new XAttribute("type", "input"),
-        //                                                            new XAttribute("tag", input2.Tag),
-        //                                                            new XAttribute("name", input2.TagName),
-        //                                                            new XAttribute("address", input2.IOAddress),
-        //                                                            new XAttribute("driver", input2.Driver),
-        //                                                            new XAttribute("scanTime", input2.ScanTime),
-        //                                                            new XAttribute("onOffScan", input2.OnOffScan),
-        //                                                            new XAttribute("lowLimit", input2.LowLimit),
-        //                                                            new XAttribute("highLimit", input2.HighLimit)),
-        //        from output in outputTags
-        //        where output.Value.Tag == "digital"
-        //        select new XElement("Tag", output.Value.Description, new XAttribute("type", "output"),
-        //                                                             new XAttribute("tag", output.Value.Tag),
-        //                                                             new XAttribute("name", output.Value.TagName),
-        //                                                             new XAttribute("address", output.Value.IOAddress),
-        //                                                             new XAttribute("initValue", output.Value.InitialValue)),
-        //        from output2 in analogOutputList
-        //        select new XElement("Tag", output2.Description, new XAttribute("type", "output"),
-        //                                                        new XAttribute("tag", output2.Tag),
-        //                                                        new XAttribute("name", output2.TagName),
-        //                                                        new XAttribute("address", output2.IOAddress),
-        //                                                        new XAttribute("initValue", output2.InitialValue),
-        //                                                        new XAttribute("lowLimit", output2.LowLimit),
-        //                                                        new XAttribute("highLimit", output2.HighLimit)
-        //        ));
-        //    using (StreamWriter sw = File.CreateText(HostingEnvironment.ApplicationPhysicalPath + "\\scadaConfig.xml"))
-        //    {
-        //        sw.Write(scadaXML);
-        //    }
-        //}
     }
 }

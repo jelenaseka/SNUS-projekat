@@ -10,6 +10,6 @@ namespace ScadaCore
     {
         public DbSet<TagValue> Values { get; set; }
         public DbSet<User> Users { get; set; }
-        public DbSet<Alarm> Alarms { get; set; }
+        public DbSet<AlarmValue> Alarms { get; set; }
     }
 }

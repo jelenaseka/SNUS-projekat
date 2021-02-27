@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
+using System.Security.Cryptography;
 using System.ServiceModel;
 using System.Text;
 using System.Threading;
@@ -12,51 +13,38 @@ namespace ScadaCore
 {
     public class DatabaseManagerService : IDatabaseManagerService
     {
-        //public void addAlarm(string tagName, string type, double limit, int priority, DateTime time)
-        //{
-        //    //if(TagProcessing.inputTags.ContainsKey(tagName))
-        //    //{
-        //    //    if(TagProcessing.inputTags[tagName].GetType() == typeof(AnalogInput))
-        //    //    {
-        //    //        TagProcessing.alarms.Add(new Alarm(type, priority, time, tagName, limit));
-        //    //        TagProcessing.writeAlarmConfig();
-        //    //    }
-        //    //}
-            
-        //}
+        
 
-        public bool AddInputTag(string tagName, string desc, string address, string driver, int scanTime, bool onOffScan, int lowLimit, int highLimit, string type)
+        public string AddInputTag(string tagName, string desc, string address, string driver, int scanTime, bool onOffScan, double lowLimit, double highLimit, string type)
         {
             if (TagProcessing.inputTags.ContainsKey(tagName))
             {
-                return false;
+                return "Tag sa tim id-jem vec postoji.";
             }
             if(!TagProcessing.DriverAddressValidation(driver, address))
             {
-                return false;
+                return "Unos drivera nije dobar.";
             }
             if (type == "digital")
             {
                 DigitalInput digitalInput = new DigitalInput(tagName, desc, driver, address, scanTime, onOffScan, "digital");
                 Thread t = TagProcessing.AddInputTag(digitalInput);
-                TagProcessing.AddInputTagToDatabase(digitalInput);
                 t.Start();
             } else
             {
                 AnalogInput analogInput = new AnalogInput(lowLimit, highLimit, tagName, desc, driver, address, scanTime, onOffScan, "analog");
                 Thread t = TagProcessing.AddInputTag(analogInput);
-                TagProcessing.AddInputTagToDatabase(analogInput);
                 t.Start();
             }
             TagProcessing.WriteScadaConfig();
-            return true;
+            return "Tag uspesno dodat.";
         }
 
-        public bool AddOutputTag(string tagName, string desc, string address, double initVal, int lowLimit, int highLimit, string type)
+        public string AddOutputTag(string tagName, string desc, string address, double initVal, double lowLimit, double highLimit, string type)
         {
             if (TagProcessing.outputTags.ContainsKey(tagName))
             {
-                return false;
+                return "Tag sa tim id-jem vec postoji.";
             }
             if (type == "digital")
             {
@@ -69,70 +57,39 @@ namespace ScadaCore
                 TagProcessing.AddOutputTag(analogOutput);
             }
             TagProcessing.WriteScadaConfig();
-            return true;
+            return "Tag uspesno dodat.";
         }
 
-        public bool ChangeOutputValue(string tagName, double value)
+        public string ChangeOutputValue(string tagName, double value)
         {
-            lock(TagProcessing.locker)
+            if(!TagProcessing.outputTags.ContainsKey(tagName))
             {
-                var output = TagProcessing.databaseContext.Values
-                        .Where(tag => tag.TagName == tagName)
-                        .FirstOrDefault();
-                if (output == null)
-                {
-                    return false;
-                }
-                output.Value = value;
-                TagProcessing.databaseContext.SaveChanges();
+                return "Ne postoji tag sa tim id-jem";
             }
-            
-            return true;
+
+            return TagProcessing.ChangeOutputValue(tagName, value);
         }
 
         public Dictionary<string, double> GetOutputValues()
         {
-            Dictionary<string, double> values = new Dictionary<string, double>();
-
-            lock(TagProcessing.locker)
-            {
-                var outputs = TagProcessing.databaseContext.Values
-                            .Where(tag => tag.Tag == "output");
-                foreach (var tag in outputs) 
-                {
-                    values.Add(tag.TagName, tag.Value);
-                }
-            }
-
-            return values;
+            return TagProcessing.outputValues;
         }
 
-        public bool TurnScanOnOff(string tagName, bool scan)
+        public string TurnScanOnOff(string tagName)
         {
             if(!TagProcessing.inputTags.ContainsKey(tagName))
             {
-                return false;
+                return "Ne postoji tag sa tim id-jem";
             }
-            TagProcessing.inputTags[tagName].OnOffScan = scan;
+            bool scan = TagProcessing.inputTags[tagName].OnOffScan;
+            TagProcessing.inputTags[tagName].OnOffScan = !scan;
             TagProcessing.WriteScadaConfig();
-            
-            return true;
+
+            if (scan)
+                return "Tag uspesno iskljucen.";
+            else
+                return "Tag uspesno ukljucen.";
         }
-
-        //public void deleteAlarm(string tagName)
-        //{
-        //    //List<Alarm> newList = new List<Alarm>();
-        //    //foreach(var alarm in TagProcessing.alarms)
-        //    //{
-        //    //    if (alarm.TagName != tagName)
-        //    //    {
-        //    //        newList.Add(alarm);
-        //    //    }
-        //    //}
-        //    //TagProcessing.alarms = newList;
-        //    //TagProcessing.writeAlarmConfig(newList);
-        //}
-
 
         public bool IsDatabaseEmpty()
         {
@@ -146,14 +103,24 @@ namespace ScadaCore
             return false;
         }
 
-        public bool RemoveInputTag(string tagName)
+        public string RemoveInputTag(string tagName)
         {
-            return TagProcessing.RemoveInputTag(tagName);
+            if (!TagProcessing.inputTags.ContainsKey(tagName))
+            {
+                return "Tag sa tim id-jem ne postoji.";
+            }
+            TagProcessing.RemoveInputTag(tagName);
+            return "Tag uspesno obrisan.";
         }
 
-        public bool RemoveOutputTag(string tagName)
+        public string RemoveOutputTag(string tagName)
         {
-            return TagProcessing.RemoveOutputTag(tagName);
+            if (!TagProcessing.outputTags.ContainsKey(tagName))
+            {
+                return "Tag sa tim id-jem ne postoji.";
+            }
+            TagProcessing.RemoveOutputTag(tagName);
+            return "Tag uspesno obrisan.";
         }
 
         public bool Registration(string username, string password, string role)
@@ -177,16 +144,68 @@ namespace ScadaCore
 
         public string SignIn(string username, string password)
         {
+            
             using (var db = new DatabaseContext())
             {
-                var user = db.Users.Where(u => u.Username == username && u.Password == password).FirstOrDefault();
+                var user = db.Users.Where(u => u.Username == username).FirstOrDefault();
                 if (user != null)
                 {
-                    return user.Role;
+                    if (ValidateEncryptedData(password, user.Password))
+                    {
+                        return user.Role;
+                    }
+                    return "Lozinka nije dobra.";
                 }
-                return null;
+                return "Korisnicko ime ne postoji.";
             }
         }
 
+        public string AddAlarm(string tagName, string type, double limit, int priority)
+        {
+            if (TagProcessing.inputTags.ContainsKey(tagName) && !TagProcessing.alarms.ContainsKey(tagName + type + limit))
+            {
+                if (TagProcessing.inputTags[tagName].GetType() == typeof(AnalogInput))
+                {
+                    AnalogInput ai = (AnalogInput)TagProcessing.inputTags[tagName];
+                    if (type == "low" && limit < ai.LowLimit)
+                    {
+                        return "Neuspesno dodavanje alarma. Limit alarma je manji od limita inputa";
+                    }
+                    else if (type == "high" && limit > ai.HighLimit)
+                    {
+                        return "Neuspesno dodavanje alarma. Limit alarma je veci od limita inputa";
+                    }
+                    TagProcessing.AddAlarm(new Alarm(type, priority, tagName, limit));
+                    TagProcessing.WriteAlarmConfig();
+                    return "Alarm uspesno dodat.";
+                }
+                return "Tag sa tim id-jem nije analogni.";
+            }
+            return "Ne postoji tag sa tim id-jem ili alarm vec postoji.";
+        }
+
+        public string DeleteAlarm(string id)
+        {
+            if (TagProcessing.alarms.ContainsKey(id))
+            {
+                TagProcessing.RemoveAlarm(id);
+                TagProcessing.WriteAlarmConfig();
+                return "Alarm uspesno obrisan.";
+            }
+            return "Ne postoji alarm sa tim id-jem.";
+        }
+        private static bool ValidateEncryptedData(string valueToValidate, string valueFromDatabase)
+        {
+            string[] arrValues = valueFromDatabase.Split(':');
+            string encryptedDbValue = arrValues[0];
+            string salt = arrValues[1];
+            byte[] saltedValue = Encoding.UTF8.GetBytes(salt + valueToValidate);
+            using (var sha = new SHA256Managed())
+            {
+                byte[] hash = sha.ComputeHash(saltedValue);
+                string enteredValueToValidate = Convert.ToBase64String(hash);
+                return encryptedDbValue.Equals(enteredValueToValidate);
+            }
+        }
     }
 }

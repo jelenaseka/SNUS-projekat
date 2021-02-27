@@ -1,13 +1,14 @@
 <Tags>
-  <Tag tag="input" type="digital" name="tag1" address="S" driver="SD" scanTime="2" onOffScan="true">Description1</Tag>
-  <Tag tag="input" type="digital" name="tag2" address="S" driver="RTD" scanTime="2" onOffScan="false">Description2</Tag>
-  <Tag tag="input" type="digital" name="tag11" address="S" driver="SD" scanTime="5" onOffScan="false">opis</Tag>
-  <Tag tag="input" type="analog" name="tag5" address="C" driver="SD" scanTime="3" onOffScan="false" lowLimit="10" highLimit="100">Description5</Tag>
-  <Tag tag="input" type="analog" name="tag45" address="T" driver="RTD" scanTime="3" onOffScan="false" lowLimit="1" highLimit="10">tagic</Tag>
-  <Tag tag="input" type="analog" name="tag12" address="R" driver="SD" scanTime="3" onOffScan="true" lowLimit="1" highLimit="8">opis12</Tag>
-  <Tag tag="output" type="digital" name="tag3" address="C" initValue="4">Description3</Tag>
-  <Tag tag="output" type="digital" name="tag10" address="R" initValue="3">Tagic opis</Tag>
-  <Tag tag="output" type="digital" name="tag13" address="f" initValue="3">opis13</Tag>
-  <Tag tag="output" type="analog" name="tag7" address="C" initValue="4" lowLimit="10" highLimit="100">Description7</Tag>
-  <Tag tag="output" type="analog" name="tag8" address="C" initValue="1" lowLimit="10" highLimit="100">Description8</Tag>
+  <Tag tag="input" type="digital" name="tag1" address="S" driver="SD" scanTime="12" onOffScan="false">Description1</Tag>
+  <Tag tag="input" type="digital" name="tag11" address="S" driver="SD" scanTime="15" onOffScan="false">opis</Tag>
+  <Tag tag="input" type="analog" name="tag5" address="C" driver="SD" scanTime="13" onOffScan="false" lowLimit="1" highLimit="9">Description5</Tag>
+  <Tag tag="input" type="analog" name="tag12" address="R" driver="SD" scanTime="13" onOffScan="false" lowLimit="2" highLimit="8">opis12</Tag>
+  <Tag tag="output" type="digital" name="tag3" address="C" initValue="0">Description3</Tag>
+  <Tag tag="output" type="digital" name="tag10" address="R" initValue="1">Tagic opis</Tag>
+  <Tag tag="output" type="digital" name="tag14" address="G" initValue="1">opis14</Tag>
+  <Tag tag="output" type="analog" name="tag7" address="C" initValue="4" lowLimit="1.5" highLimit="8.6">Description7</Tag>
+  <Tag tag="output" type="analog" name="tag8" address="C" initValue="1" lowLimit="4.4" highLimit="9.9">Description8</Tag>
+  <Tag tag="output" type="analog" name="tag15" address="H" initValue="6" lowLimit="1" highLimit="9.9">15</Tag>
+  <Tag tag="output" type="analog" name="tag16" address="L" initValue="3" lowLimit="2.7" highLimit="7">16</Tag>
+  <Tag tag="output" type="analog" name="tag19" address="y" initValue="4" lowLimit="3" highLimit="19">19</Tag>
 </Tags>

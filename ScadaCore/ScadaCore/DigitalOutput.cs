@@ -33,10 +33,10 @@ namespace ScadaCore
     }
     public class AnalogOutput : Output
     {
-        public int LowLimit { get; set; }
-        public int HighLimit { get; set; }
+        public double LowLimit { get; set; }
+        public double HighLimit { get; set; }
         public AnalogOutput() { }
-        public AnalogOutput(int lowLimit, int highLimit, string tagName, string description, string ioAddress, double initialValue, string type) : base(tagName, description, ioAddress, initialValue, type)
+        public AnalogOutput(double lowLimit, double highLimit, string tagName, string description, string ioAddress, double initialValue, string type) : base(tagName, description, ioAddress, initialValue, type)
         {
             LowLimit = lowLimit;
             HighLimit = highLimit;

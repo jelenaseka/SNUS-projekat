@@ -15,17 +15,17 @@ namespace RealTimeUnit.ServiceReference {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="ServiceReference.IRealTimeUnitService")]
     public interface IRealTimeUnitService {
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IRealTimeUnitService/initialize", ReplyAction="http://tempuri.org/IRealTimeUnitService/initializeResponse")]
-        bool initialize(string id, string address);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IRealTimeUnitService/Initialize", ReplyAction="http://tempuri.org/IRealTimeUnitService/InitializeResponse")]
+        bool Initialize(string id, string address, byte[] signature, string message);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IRealTimeUnitService/initialize", ReplyAction="http://tempuri.org/IRealTimeUnitService/initializeResponse")]
-        System.Threading.Tasks.Task<bool> initializeAsync(string id, string address);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IRealTimeUnitService/Initialize", ReplyAction="http://tempuri.org/IRealTimeUnitService/InitializeResponse")]
+        System.Threading.Tasks.Task<bool> InitializeAsync(string id, string address, byte[] signature, string message);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IRealTimeUnitService/sendValueToAddress", ReplyAction="http://tempuri.org/IRealTimeUnitService/sendValueToAddressResponse")]
-        void sendValueToAddress(string address, int number);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IRealTimeUnitService/SendValueToAddress", ReplyAction="http://tempuri.org/IRealTimeUnitService/SendValueToAddressResponse")]
+        void SendValueToAddress(string address, int number);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IRealTimeUnitService/sendValueToAddress", ReplyAction="http://tempuri.org/IRealTimeUnitService/sendValueToAddressResponse")]
-        System.Threading.Tasks.Task sendValueToAddressAsync(string address, int number);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IRealTimeUnitService/SendValueToAddress", ReplyAction="http://tempuri.org/IRealTimeUnitService/SendValueToAddressResponse")]
+        System.Threading.Tasks.Task SendValueToAddressAsync(string address, int number);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -55,20 +55,20 @@ namespace RealTimeUnit.ServiceReference {
                 base(binding, remoteAddress) {
         }
         
-        public bool initialize(string id, string address) {
-            return base.Channel.initialize(id, address);
+        public bool Initialize(string id, string address, byte[] signature, string message) {
+            return base.Channel.Initialize(id, address, signature, message);
         }
         
-        public System.Threading.Tasks.Task<bool> initializeAsync(string id, string address) {
-            return base.Channel.initializeAsync(id, address);
+        public System.Threading.Tasks.Task<bool> InitializeAsync(string id, string address, byte[] signature, string message) {
+            return base.Channel.InitializeAsync(id, address, signature, message);
         }
         
-        public void sendValueToAddress(string address, int number) {
-            base.Channel.sendValueToAddress(address, number);
+        public void SendValueToAddress(string address, int number) {
+            base.Channel.SendValueToAddress(address, number);
         }
         
-        public System.Threading.Tasks.Task sendValueToAddressAsync(string address, int number) {
-            return base.Channel.sendValueToAddressAsync(address, number);
+        public System.Threading.Tasks.Task SendValueToAddressAsync(string address, int number) {
+            return base.Channel.SendValueToAddressAsync(address, number);
         }
     }
 }

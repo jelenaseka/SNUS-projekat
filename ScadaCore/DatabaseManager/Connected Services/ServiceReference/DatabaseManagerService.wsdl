@@ -67,6 +67,18 @@
   <wsdl:message name="IDatabaseManagerService_RemoveOutputTag_OutputMessage">
     <wsdl:part name="parameters" element="tns:RemoveOutputTagResponse" />
   </wsdl:message>
+  <wsdl:message name="IDatabaseManagerService_AddAlarm_InputMessage">
+    <wsdl:part name="parameters" element="tns:AddAlarm" />
+  </wsdl:message>
+  <wsdl:message name="IDatabaseManagerService_AddAlarm_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AddAlarmResponse" />
+  </wsdl:message>
+  <wsdl:message name="IDatabaseManagerService_DeleteAlarm_InputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteAlarm" />
+  </wsdl:message>
+  <wsdl:message name="IDatabaseManagerService_DeleteAlarm_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteAlarmResponse" />
+  </wsdl:message>
   <wsdl:portType name="IDatabaseManagerService">
     <wsdl:operation name="IsDatabaseEmpty">
       <wsdl:input wsaw:Action="http://tempuri.org/IDatabaseManagerService/IsDatabaseEmpty" message="tns:IDatabaseManagerService_IsDatabaseEmpty_InputMessage" />
@@ -107,6 +119,14 @@
     <wsdl:operation name="RemoveOutputTag">
       <wsdl:input wsaw:Action="http://tempuri.org/IDatabaseManagerService/RemoveOutputTag" message="tns:IDatabaseManagerService_RemoveOutputTag_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IDatabaseManagerService/RemoveOutputTagResponse" message="tns:IDatabaseManagerService_RemoveOutputTag_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="AddAlarm">
+      <wsdl:input wsaw:Action="http://tempuri.org/IDatabaseManagerService/AddAlarm" message="tns:IDatabaseManagerService_AddAlarm_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IDatabaseManagerService/AddAlarmResponse" message="tns:IDatabaseManagerService_AddAlarm_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteAlarm">
+      <wsdl:input wsaw:Action="http://tempuri.org/IDatabaseManagerService/DeleteAlarm" message="tns:IDatabaseManagerService_DeleteAlarm_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IDatabaseManagerService/DeleteAlarmResponse" message="tns:IDatabaseManagerService_DeleteAlarm_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_IDatabaseManagerService" type="tns:IDatabaseManagerService">
@@ -194,6 +214,24 @@
     </wsdl:operation>
     <wsdl:operation name="RemoveOutputTag">
       <soap:operation soapAction="http://tempuri.org/IDatabaseManagerService/RemoveOutputTag" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddAlarm">
+      <soap:operation soapAction="http://tempuri.org/IDatabaseManagerService/AddAlarm" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteAlarm">
+      <soap:operation soapAction="http://tempuri.org/IDatabaseManagerService/DeleteAlarm" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>

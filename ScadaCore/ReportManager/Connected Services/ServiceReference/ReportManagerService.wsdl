@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="ReportManagerService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import schemaLocation="http://localhost:58140/ReportManagerService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://localhost:58140/ReportManagerService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://localhost:58140/ReportManagerService.svc?xsd=xsd2" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="IReportManagerService_DisplayAlarmsByDate_InputMessage">
+    <wsdl:part name="parameters" element="tns:DisplayAlarmsByDate" />
+  </wsdl:message>
+  <wsdl:message name="IReportManagerService_DisplayAlarmsByDate_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DisplayAlarmsByDateResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportManagerService_DisplayAlarmsByPriority_InputMessage">
+    <wsdl:part name="parameters" element="tns:DisplayAlarmsByPriority" />
+  </wsdl:message>
+  <wsdl:message name="IReportManagerService_DisplayAlarmsByPriority_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DisplayAlarmsByPriorityResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportManagerService_DisplayTagsByDate_InputMessage">
+    <wsdl:part name="parameters" element="tns:DisplayTagsByDate" />
+  </wsdl:message>
+  <wsdl:message name="IReportManagerService_DisplayTagsByDate_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DisplayTagsByDateResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportManagerService_DisplayAnalogInputs_InputMessage">
+    <wsdl:part name="parameters" element="tns:DisplayAnalogInputs" />
+  </wsdl:message>
+  <wsdl:message name="IReportManagerService_DisplayAnalogInputs_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DisplayAnalogInputsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportManagerService_DisplayDigitalInputs_InputMessage">
+    <wsdl:part name="parameters" element="tns:DisplayDigitalInputs" />
+  </wsdl:message>
+  <wsdl:message name="IReportManagerService_DisplayDigitalInputs_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DisplayDigitalInputsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportManagerService_DisplayTagById_InputMessage">
+    <wsdl:part name="parameters" element="tns:DisplayTagById" />
+  </wsdl:message>
+  <wsdl:message name="IReportManagerService_DisplayTagById_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DisplayTagByIdResponse" />
+  </wsdl:message>
+  <wsdl:portType name="IReportManagerService">
+    <wsdl:operation name="DisplayAlarmsByDate">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportManagerService/DisplayAlarmsByDate" message="tns:IReportManagerService_DisplayAlarmsByDate_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportManagerService/DisplayAlarmsByDateResponse" message="tns:IReportManagerService_DisplayAlarmsByDate_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DisplayAlarmsByPriority">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportManagerService/DisplayAlarmsByPriority" message="tns:IReportManagerService_DisplayAlarmsByPriority_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportManagerService/DisplayAlarmsByPriorityResponse" message="tns:IReportManagerService_DisplayAlarmsByPriority_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DisplayTagsByDate">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportManagerService/DisplayTagsByDate" message="tns:IReportManagerService_DisplayTagsByDate_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportManagerService/DisplayTagsByDateResponse" message="tns:IReportManagerService_DisplayTagsByDate_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DisplayAnalogInputs">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportManagerService/DisplayAnalogInputs" message="tns:IReportManagerService_DisplayAnalogInputs_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportManagerService/DisplayAnalogInputsResponse" message="tns:IReportManagerService_DisplayAnalogInputs_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DisplayDigitalInputs">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportManagerService/DisplayDigitalInputs" message="tns:IReportManagerService_DisplayDigitalInputs_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportManagerService/DisplayDigitalInputsResponse" message="tns:IReportManagerService_DisplayDigitalInputs_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DisplayTagById">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportManagerService/DisplayTagById" message="tns:IReportManagerService_DisplayTagById_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportManagerService/DisplayTagByIdResponse" message="tns:IReportManagerService_DisplayTagById_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BasicHttpBinding_IReportManagerService" type="tns:IReportManagerService">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="DisplayAlarmsByDate">
+      <soap:operation soapAction="http://tempuri.org/IReportManagerService/DisplayAlarmsByDate" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DisplayAlarmsByPriority">
+      <soap:operation soapAction="http://tempuri.org/IReportManagerService/DisplayAlarmsByPriority" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DisplayTagsByDate">
+      <soap:operation soapAction="http://tempuri.org/IReportManagerService/DisplayTagsByDate" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DisplayAnalogInputs">
+      <soap:operation soapAction="http://tempuri.org/IReportManagerService/DisplayAnalogInputs" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DisplayDigitalInputs">
+      <soap:operation soapAction="http://tempuri.org/IReportManagerService/DisplayDigitalInputs" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DisplayTagById">
+      <soap:operation soapAction="http://tempuri.org/IReportManagerService/DisplayTagById" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ReportManagerService">
+    <wsdl:port name="BasicHttpBinding_IReportManagerService" binding="tns:BasicHttpBinding_IReportManagerService">
+      <soap:address location="http://localhost:58140/ReportManagerService.svc" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

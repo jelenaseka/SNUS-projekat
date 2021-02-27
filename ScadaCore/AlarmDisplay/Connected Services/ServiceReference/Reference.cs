@@ -26,7 +26,7 @@ namespace AlarmDisplay.ServiceReference {
     public interface IAlarmDisplayServiceCallback {
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IAlarmDisplayService/OnAlarmInvoked")]
-        void OnAlarmInvoked(string alarm);
+        void OnAlarmInvoked(string alarm, int priority);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]

@@ -13,13 +13,13 @@ namespace ScadaCore
         [OperationContract]
         bool IsDatabaseEmpty();
         [OperationContract]
-        bool ChangeOutputValue(string tagName, double value);
+        string ChangeOutputValue(string tagName, double value);
 
         [OperationContract]
         Dictionary<string, double> GetOutputValues();
 
         [OperationContract]
-        bool TurnScanOnOff(string tagName, bool scan);
+        string TurnScanOnOff(string tagName);
         
         [OperationContract]
         bool Registration(string username, string password, string role);
@@ -28,19 +28,19 @@ namespace ScadaCore
         string SignIn(string username, string password);
 
         [OperationContract]
-        bool AddOutputTag(string tagName, string desc, string address, double initVal, int lowLimit, int highLimit, string type);
+        string AddOutputTag(string tagName, string desc, string address, double initVal, double lowLimit, double highLimit, string type);
 
         [OperationContract]
-        bool AddInputTag(string tagName, string desc, string address, string driver, int scanTime, bool onOffScan, int lowLimit, int highLimit, string type);
+        string AddInputTag(string tagName, string desc, string address, string driver, int scanTime, bool onOffScan, double lowLimit, double highLimit, string type);
         
         [OperationContract]
-        bool RemoveInputTag(string tagName);
+        string RemoveInputTag(string tagName);
 
         [OperationContract]
-        bool RemoveOutputTag(string tagName);
-        //[OperationContract]
-        //void addAlarm(string tagName, string type, double limit, int priority, DateTime time);
-        //[OperationContract]
-        //void deleteAlarm(string tagName);
+        string RemoveOutputTag(string tagName);
+        [OperationContract]
+        string AddAlarm(string tagName, string type, double limit, int priority);
+        [OperationContract]
+        string DeleteAlarm(string tagName);
     }
 }

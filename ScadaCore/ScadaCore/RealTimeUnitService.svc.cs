@@ -1,34 +1,73 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.ServiceModel;
+using System.IO;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace ScadaCore
 {
-    // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "RealTimeUnitService" in code, svc and config file together.
-    // NOTE: In order to launch WCF Test Client for testing this service, please select RealTimeUnitService.svc or RealTimeUnitService.svc.cs at the Solution Explorer and start debugging.
     public class RealTimeUnitService : IRealTimeUnitService
     {
         static readonly object locker = new object();
-        public bool initialize(string id, string address)
+        static List<string> rtdIdlist = new List<string>();
+
+        public RealTimeUnitService()
         {
-            if(RealTimeDriver.values.ContainsKey(address))
+            ImportPublicKey();
+        }
+
+        private CspParameters csp;
+        private RSACryptoServiceProvider rsa;
+
+        const string IMPORT_FOLDER = @"C:\public_key\";
+        const string PUBLIC_KEY_FILE = @"rsaPublicKey.txt";
+        public void ImportPublicKey()
+        {
+            string path = Path.Combine(IMPORT_FOLDER, PUBLIC_KEY_FILE);
+            FileInfo fi = new FileInfo(path);
+
+            if (fi.Exists)
+            {
+                using (StreamReader reader = new StreamReader(path))
+                {
+                    csp = new CspParameters();
+                    rsa = new RSACryptoServiceProvider(csp);
+                    string publicKeyText = reader.ReadToEnd();
+                    rsa.FromXmlString(publicKeyText);
+                }
+            }
+        }
+        public bool Initialize(string id, string address, byte[] signature, string message)
+        {
+            if(RealTimeDriver.values.ContainsKey(address) || rtdIdlist.Contains(id))
             {
                 return false;
-            } else
+            }
+            if (VerifySignedMessage(message, signature))
             {
-                lock(locker)
+                lock (locker)
                 {
                     RealTimeDriver.values[address] = 0;
                 }
-                
+                rtdIdlist.Add(id);
+                return true;
             }
-            return true;
+            return false;
+        }
+        public bool VerifySignedMessage(string message, byte[] signature)
+        {
+            using (var sha = SHA256Managed.Create())
+            {
+                var hashValue = sha.ComputeHash(Encoding.UTF8.GetBytes(message));
+
+                var deformatter = new RSAPKCS1SignatureDeformatter(rsa);
+                deformatter.SetHashAlgorithm("SHA256");
+
+                return deformatter.VerifySignature(hashValue, signature);
+            }
         }
 
-        public void sendValueToAddress(string address, int number)
+        public void SendValueToAddress(string address, int number)
         {
             lock(locker)
             {

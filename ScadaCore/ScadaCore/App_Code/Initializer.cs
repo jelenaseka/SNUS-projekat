@@ -13,9 +13,8 @@ namespace ScadaCore.App_Code
         {
             XElement scadaXML = XElement.Load(HostingEnvironment.ApplicationPhysicalPath + "\\scadaConfig.xml");
 
-            var tags = scadaXML.Descendants("Tag").Where(t => t.Attribute("driver").Value == "SD");
+            var tags = scadaXML.Descendants("Tag");
             InitializeTags(tags);
-            TagProcessing.AddInputTagsToDatabase();
             InitializeAlarms();
             TagProcessing.StartContextThread();
             TagProcessing.StartThreads();
@@ -30,35 +29,39 @@ namespace ScadaCore.App_Code
                 string tagType = tag.Attribute("tag").Value;
                 string description = tag.Value;
                 string driver;
-                int scanTime, lowLimit, highLimit;
+                int scanTime; 
                 bool onOffScan;
-                double initValue;
+                double initValue, lowLimit, highLimit;
 
-                if(tagType == "input")
+                if (tagType == "input")
                 {
                     driver = tag.Attribute("driver").Value;
-                    scanTime = Convert.ToInt32(tag.Attribute("scanTime").Value);
-                    onOffScan = Convert.ToBoolean(tag.Attribute("onOffScan").Value);
-
-                    if(type == "analog")
+                    if(driver == "SD")
                     {
-                        lowLimit = Convert.ToInt32(tag.Attribute("lowLimit").Value);
-                        highLimit = Convert.ToInt32(tag.Attribute("highLimit").Value);
+                        scanTime = Convert.ToInt32(tag.Attribute("scanTime").Value);
+                        onOffScan = Convert.ToBoolean(tag.Attribute("onOffScan").Value);
 
-                        AnalogInput analogInput = new AnalogInput(lowLimit, highLimit, name, description, driver, address, scanTime, onOffScan, "analog");
-                        TagProcessing.AddInputTag(analogInput);
-                    } else
-                    {
-                        DigitalInput digitalInput = new DigitalInput(name, description, driver, address, scanTime, onOffScan, "digital");
-                        TagProcessing.AddInputTag(digitalInput);
+                        if (type == "analog")
+                        {
+                            lowLimit = Convert.ToDouble(tag.Attribute("lowLimit").Value);
+                            highLimit = Convert.ToDouble(tag.Attribute("highLimit").Value);
+
+                            AnalogInput analogInput = new AnalogInput(lowLimit, highLimit, name, description, driver, address, scanTime, onOffScan, "analog");
+                            TagProcessing.AddInputTag(analogInput);
+                        }
+                        else
+                        {
+                            DigitalInput digitalInput = new DigitalInput(name, description, driver, address, scanTime, onOffScan, "digital");
+                            TagProcessing.AddInputTag(digitalInput);
+                        }
                     }
                 } else
                 {
                     initValue = Convert.ToDouble(tag.Attribute("initValue").Value);
                     if (type == "analog")
                     {
-                        lowLimit = Convert.ToInt32(tag.Attribute("lowLimit").Value);
-                        highLimit = Convert.ToInt32(tag.Attribute("highLimit").Value);
+                        lowLimit = Double.Parse(tag.Attribute("lowLimit").Value);
+                        highLimit = Double.Parse(tag.Attribute("highLimit").Value);
                         AnalogOutput analogOutput = new AnalogOutput(lowLimit, highLimit, name, description, address, initValue, "analog");
                         TagProcessing.AddOutputTag(analogOutput);
                     } else
@@ -81,11 +84,10 @@ namespace ScadaCore.App_Code
                 string tagName = alarm.Attribute("tagName").Value;
                 string type = alarm.Attribute("type").Value;
                 int priority = Convert.ToInt32(alarm.Attribute("priority").Value);
-                DateTime time = DateTime.Parse(alarm.Attribute("time").Value);
                 double limit = Double.Parse(alarm.Value);
 
-                string id = tagName + type + limit;
-                TagProcessing.AddAlarm(new Alarm(id, type, priority, time, tagName, limit));
+                
+                TagProcessing.AddAlarm(new Alarm(type, priority, tagName, limit));
             }
         }
 
