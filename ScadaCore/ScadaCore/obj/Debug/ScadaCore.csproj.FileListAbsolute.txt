@@ -10,3 +10,15 @@ E:\FAKS\Snus Projekat\ScadaCore\ScadaCore\bin\EntityFramework.xml
 E:\FAKS\Snus Projekat\ScadaCore\ScadaCore\bin\EntityFramework.SqlServer.xml
 E:\FAKS\Snus Projekat\ScadaCore\ScadaCore\obj\Debug\ScadaCore.csprojAssemblyReference.cache
 E:\FAKS\Snus Projekat\ScadaCore\ScadaCore\obj\Debug\ScadaCore.csproj.CopyComplete
+C:\Users\arsic\Desktop\SNUS-projekat-master\ScadaCore\ScadaCore\bin\ScadaCore.dll.config
+C:\Users\arsic\Desktop\SNUS-projekat-master\ScadaCore\ScadaCore\bin\ScadaCore.dll
+C:\Users\arsic\Desktop\SNUS-projekat-master\ScadaCore\ScadaCore\bin\ScadaCore.pdb
+C:\Users\arsic\Desktop\SNUS-projekat-master\ScadaCore\ScadaCore\bin\EntityFramework.dll
+C:\Users\arsic\Desktop\SNUS-projekat-master\ScadaCore\ScadaCore\bin\EntityFramework.SqlServer.dll
+C:\Users\arsic\Desktop\SNUS-projekat-master\ScadaCore\ScadaCore\bin\EntityFramework.xml
+C:\Users\arsic\Desktop\SNUS-projekat-master\ScadaCore\ScadaCore\bin\EntityFramework.SqlServer.xml
+C:\Users\arsic\Desktop\SNUS-projekat-master\ScadaCore\ScadaCore\obj\Debug\ScadaCore.csprojAssemblyReference.cache
+C:\Users\arsic\Desktop\SNUS-projekat-master\ScadaCore\ScadaCore\obj\Debug\ScadaCore.csproj.CoreCompileInputs.cache
+C:\Users\arsic\Desktop\SNUS-projekat-master\ScadaCore\ScadaCore\obj\Debug\ScadaCore.csproj.CopyComplete
+C:\Users\arsic\Desktop\SNUS-projekat-master\ScadaCore\ScadaCore\obj\Debug\ScadaCore.dll
+C:\Users\arsic\Desktop\SNUS-projekat-master\ScadaCore\ScadaCore\obj\Debug\ScadaCore.pdb

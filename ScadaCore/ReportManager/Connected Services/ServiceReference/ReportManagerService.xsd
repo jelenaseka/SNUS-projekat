@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:import schemaLocation="http://localhost:58140/ReportManagerService.svc?xsd=xsd2" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
-  <xs:element name="DisplayAlarmsByDate">
+  <xs:import schemaLocation="http://localhost:58140/ReportManagerService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/ScadaCore" />
+  <xs:import schemaLocation="http://localhost:58140/ReportManagerService.svc?xsd=xsd3" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:element name="GetAlarmsByDateRange">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="dateFrom" type="xs:dateTime" />
@@ -11,14 +12,14 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="DisplayAlarmsByDateResponse">
+  <xs:element name="GetAlarmsByDateRangeResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="DisplayAlarmsByDateResult" nillable="true" type="q1:ArrayOfstring" />
+        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/ScadaCore" minOccurs="0" name="GetAlarmsByDateRangeResult" nillable="true" type="q1:ArrayOfAlarmValue" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="DisplayAlarmsByPriority">
+  <xs:element name="GetAlarmsByPriority">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="priority" type="xs:int" />
@@ -26,14 +27,14 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="DisplayAlarmsByPriorityResponse">
+  <xs:element name="GetAlarmsByPriorityResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q2="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="DisplayAlarmsByPriorityResult" nillable="true" type="q2:ArrayOfstring" />
+        <xs:element xmlns:q2="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetAlarmsByPriorityResult" nillable="true" type="q2:ArrayOfstring" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="DisplayTagsByDate">
+  <xs:element name="GetTagsByDateRange">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="dateFrom" type="xs:dateTime" />
@@ -42,42 +43,42 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="DisplayTagsByDateResponse">
+  <xs:element name="GetTagsByDateRangeResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q3="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="DisplayTagsByDateResult" nillable="true" type="q3:ArrayOfstring" />
+        <xs:element xmlns:q3="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetTagsByDateRangeResult" nillable="true" type="q3:ArrayOfstring" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="DisplayAnalogInputs">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="sortType" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="DisplayAnalogInputsResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q4="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="DisplayAnalogInputsResult" nillable="true" type="q4:ArrayOfstring" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="DisplayDigitalInputs">
+  <xs:element name="GetAnalogInputs">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="sortType" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="DisplayDigitalInputsResponse">
+  <xs:element name="GetAnalogInputsResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q5="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="DisplayDigitalInputsResult" nillable="true" type="q5:ArrayOfstring" />
+        <xs:element xmlns:q4="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetAnalogInputsResult" nillable="true" type="q4:ArrayOfstring" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="DisplayTagById">
+  <xs:element name="GetDigitalInputs">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="sortType" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetDigitalInputsResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q5="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetDigitalInputsResult" nillable="true" type="q5:ArrayOfstring" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetTagValuesByName">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="tagName" nillable="true" type="xs:string" />
@@ -85,10 +86,10 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="DisplayTagByIdResponse">
+  <xs:element name="GetTagValuesByNameResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q6="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="DisplayTagByIdResult" nillable="true" type="q6:ArrayOfstring" />
+        <xs:element xmlns:q6="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetTagValuesByNameResult" nillable="true" type="q6:ArrayOfstring" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

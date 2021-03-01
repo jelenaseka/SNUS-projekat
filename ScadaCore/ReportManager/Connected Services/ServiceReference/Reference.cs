@@ -9,47 +9,182 @@
 //------------------------------------------------------------------------------
 
 namespace ReportManager.ServiceReference {
+    using System.Runtime.Serialization;
+    using System;
     
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="AlarmValue", Namespace="http://schemas.datacontract.org/2004/07/ScadaCore")]
+    [System.SerializableAttribute()]
+    public partial class AlarmValue : ReportManager.ServiceReference.Alarm {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.DateTime TimeField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private double TriggerValueField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.DateTime Time {
+            get {
+                return this.TimeField;
+            }
+            set {
+                if ((this.TimeField.Equals(value) != true)) {
+                    this.TimeField = value;
+                    this.RaisePropertyChanged("Time");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public double TriggerValue {
+            get {
+                return this.TriggerValueField;
+            }
+            set {
+                if ((this.TriggerValueField.Equals(value) != true)) {
+                    this.TriggerValueField = value;
+                    this.RaisePropertyChanged("TriggerValue");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="Alarm", Namespace="http://schemas.datacontract.org/2004/07/ScadaCore")]
+    [System.SerializableAttribute()]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ReportManager.ServiceReference.AlarmValue))]
+    public partial class Alarm : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private double LimitField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int PriorityField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string TagNameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string TypeField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public double Limit {
+            get {
+                return this.LimitField;
+            }
+            set {
+                if ((this.LimitField.Equals(value) != true)) {
+                    this.LimitField = value;
+                    this.RaisePropertyChanged("Limit");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int Priority {
+            get {
+                return this.PriorityField;
+            }
+            set {
+                if ((this.PriorityField.Equals(value) != true)) {
+                    this.PriorityField = value;
+                    this.RaisePropertyChanged("Priority");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string TagName {
+            get {
+                return this.TagNameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.TagNameField, value) != true)) {
+                    this.TagNameField = value;
+                    this.RaisePropertyChanged("TagName");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Type {
+            get {
+                return this.TypeField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.TypeField, value) != true)) {
+                    this.TypeField = value;
+                    this.RaisePropertyChanged("Type");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="ServiceReference.IReportManagerService")]
     public interface IReportManagerService {
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportManagerService/DisplayAlarmsByDate", ReplyAction="http://tempuri.org/IReportManagerService/DisplayAlarmsByDateResponse")]
-        string[] DisplayAlarmsByDate(System.DateTime dateFrom, System.DateTime dateTo, string sortBy, string sortType);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportManagerService/GetAlarmsByDateRange", ReplyAction="http://tempuri.org/IReportManagerService/GetAlarmsByDateRangeResponse")]
+        ReportManager.ServiceReference.AlarmValue[] GetAlarmsByDateRange(System.DateTime dateFrom, System.DateTime dateTo, string sortBy, string sortType);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportManagerService/DisplayAlarmsByDate", ReplyAction="http://tempuri.org/IReportManagerService/DisplayAlarmsByDateResponse")]
-        System.Threading.Tasks.Task<string[]> DisplayAlarmsByDateAsync(System.DateTime dateFrom, System.DateTime dateTo, string sortBy, string sortType);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportManagerService/GetAlarmsByDateRange", ReplyAction="http://tempuri.org/IReportManagerService/GetAlarmsByDateRangeResponse")]
+        System.Threading.Tasks.Task<ReportManager.ServiceReference.AlarmValue[]> GetAlarmsByDateRangeAsync(System.DateTime dateFrom, System.DateTime dateTo, string sortBy, string sortType);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportManagerService/DisplayAlarmsByPriority", ReplyAction="http://tempuri.org/IReportManagerService/DisplayAlarmsByPriorityResponse")]
-        string[] DisplayAlarmsByPriority(int priority, string sortType);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportManagerService/GetAlarmsByPriority", ReplyAction="http://tempuri.org/IReportManagerService/GetAlarmsByPriorityResponse")]
+        string[] GetAlarmsByPriority(int priority, string sortType);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportManagerService/DisplayAlarmsByPriority", ReplyAction="http://tempuri.org/IReportManagerService/DisplayAlarmsByPriorityResponse")]
-        System.Threading.Tasks.Task<string[]> DisplayAlarmsByPriorityAsync(int priority, string sortType);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportManagerService/GetAlarmsByPriority", ReplyAction="http://tempuri.org/IReportManagerService/GetAlarmsByPriorityResponse")]
+        System.Threading.Tasks.Task<string[]> GetAlarmsByPriorityAsync(int priority, string sortType);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportManagerService/DisplayTagsByDate", ReplyAction="http://tempuri.org/IReportManagerService/DisplayTagsByDateResponse")]
-        string[] DisplayTagsByDate(System.DateTime dateFrom, System.DateTime dateTo, string sortType);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportManagerService/GetTagsByDateRange", ReplyAction="http://tempuri.org/IReportManagerService/GetTagsByDateRangeResponse")]
+        string[] GetTagsByDateRange(System.DateTime dateFrom, System.DateTime dateTo, string sortType);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportManagerService/DisplayTagsByDate", ReplyAction="http://tempuri.org/IReportManagerService/DisplayTagsByDateResponse")]
-        System.Threading.Tasks.Task<string[]> DisplayTagsByDateAsync(System.DateTime dateFrom, System.DateTime dateTo, string sortType);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportManagerService/GetTagsByDateRange", ReplyAction="http://tempuri.org/IReportManagerService/GetTagsByDateRangeResponse")]
+        System.Threading.Tasks.Task<string[]> GetTagsByDateRangeAsync(System.DateTime dateFrom, System.DateTime dateTo, string sortType);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportManagerService/DisplayAnalogInputs", ReplyAction="http://tempuri.org/IReportManagerService/DisplayAnalogInputsResponse")]
-        string[] DisplayAnalogInputs(string sortType);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportManagerService/GetAnalogInputs", ReplyAction="http://tempuri.org/IReportManagerService/GetAnalogInputsResponse")]
+        string[] GetAnalogInputs(string sortType);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportManagerService/DisplayAnalogInputs", ReplyAction="http://tempuri.org/IReportManagerService/DisplayAnalogInputsResponse")]
-        System.Threading.Tasks.Task<string[]> DisplayAnalogInputsAsync(string sortType);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportManagerService/GetAnalogInputs", ReplyAction="http://tempuri.org/IReportManagerService/GetAnalogInputsResponse")]
+        System.Threading.Tasks.Task<string[]> GetAnalogInputsAsync(string sortType);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportManagerService/DisplayDigitalInputs", ReplyAction="http://tempuri.org/IReportManagerService/DisplayDigitalInputsResponse")]
-        string[] DisplayDigitalInputs(string sortType);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportManagerService/GetDigitalInputs", ReplyAction="http://tempuri.org/IReportManagerService/GetDigitalInputsResponse")]
+        string[] GetDigitalInputs(string sortType);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportManagerService/DisplayDigitalInputs", ReplyAction="http://tempuri.org/IReportManagerService/DisplayDigitalInputsResponse")]
-        System.Threading.Tasks.Task<string[]> DisplayDigitalInputsAsync(string sortType);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportManagerService/GetDigitalInputs", ReplyAction="http://tempuri.org/IReportManagerService/GetDigitalInputsResponse")]
+        System.Threading.Tasks.Task<string[]> GetDigitalInputsAsync(string sortType);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportManagerService/DisplayTagById", ReplyAction="http://tempuri.org/IReportManagerService/DisplayTagByIdResponse")]
-        string[] DisplayTagById(string tagName, string sortType);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportManagerService/GetTagValuesByName", ReplyAction="http://tempuri.org/IReportManagerService/GetTagValuesByNameResponse")]
+        string[] GetTagValuesByName(string tagName, string sortType);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportManagerService/DisplayTagById", ReplyAction="http://tempuri.org/IReportManagerService/DisplayTagByIdResponse")]
-        System.Threading.Tasks.Task<string[]> DisplayTagByIdAsync(string tagName, string sortType);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportManagerService/GetTagValuesByName", ReplyAction="http://tempuri.org/IReportManagerService/GetTagValuesByNameResponse")]
+        System.Threading.Tasks.Task<string[]> GetTagValuesByNameAsync(string tagName, string sortType);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -79,52 +214,52 @@ namespace ReportManager.ServiceReference {
                 base(binding, remoteAddress) {
         }
         
-        public string[] DisplayAlarmsByDate(System.DateTime dateFrom, System.DateTime dateTo, string sortBy, string sortType) {
-            return base.Channel.DisplayAlarmsByDate(dateFrom, dateTo, sortBy, sortType);
+        public ReportManager.ServiceReference.AlarmValue[] GetAlarmsByDateRange(System.DateTime dateFrom, System.DateTime dateTo, string sortBy, string sortType) {
+            return base.Channel.GetAlarmsByDateRange(dateFrom, dateTo, sortBy, sortType);
         }
         
-        public System.Threading.Tasks.Task<string[]> DisplayAlarmsByDateAsync(System.DateTime dateFrom, System.DateTime dateTo, string sortBy, string sortType) {
-            return base.Channel.DisplayAlarmsByDateAsync(dateFrom, dateTo, sortBy, sortType);
+        public System.Threading.Tasks.Task<ReportManager.ServiceReference.AlarmValue[]> GetAlarmsByDateRangeAsync(System.DateTime dateFrom, System.DateTime dateTo, string sortBy, string sortType) {
+            return base.Channel.GetAlarmsByDateRangeAsync(dateFrom, dateTo, sortBy, sortType);
         }
         
-        public string[] DisplayAlarmsByPriority(int priority, string sortType) {
-            return base.Channel.DisplayAlarmsByPriority(priority, sortType);
+        public string[] GetAlarmsByPriority(int priority, string sortType) {
+            return base.Channel.GetAlarmsByPriority(priority, sortType);
         }
         
-        public System.Threading.Tasks.Task<string[]> DisplayAlarmsByPriorityAsync(int priority, string sortType) {
-            return base.Channel.DisplayAlarmsByPriorityAsync(priority, sortType);
+        public System.Threading.Tasks.Task<string[]> GetAlarmsByPriorityAsync(int priority, string sortType) {
+            return base.Channel.GetAlarmsByPriorityAsync(priority, sortType);
         }
         
-        public string[] DisplayTagsByDate(System.DateTime dateFrom, System.DateTime dateTo, string sortType) {
-            return base.Channel.DisplayTagsByDate(dateFrom, dateTo, sortType);
+        public string[] GetTagsByDateRange(System.DateTime dateFrom, System.DateTime dateTo, string sortType) {
+            return base.Channel.GetTagsByDateRange(dateFrom, dateTo, sortType);
         }
         
-        public System.Threading.Tasks.Task<string[]> DisplayTagsByDateAsync(System.DateTime dateFrom, System.DateTime dateTo, string sortType) {
-            return base.Channel.DisplayTagsByDateAsync(dateFrom, dateTo, sortType);
+        public System.Threading.Tasks.Task<string[]> GetTagsByDateRangeAsync(System.DateTime dateFrom, System.DateTime dateTo, string sortType) {
+            return base.Channel.GetTagsByDateRangeAsync(dateFrom, dateTo, sortType);
         }
         
-        public string[] DisplayAnalogInputs(string sortType) {
-            return base.Channel.DisplayAnalogInputs(sortType);
+        public string[] GetAnalogInputs(string sortType) {
+            return base.Channel.GetAnalogInputs(sortType);
         }
         
-        public System.Threading.Tasks.Task<string[]> DisplayAnalogInputsAsync(string sortType) {
-            return base.Channel.DisplayAnalogInputsAsync(sortType);
+        public System.Threading.Tasks.Task<string[]> GetAnalogInputsAsync(string sortType) {
+            return base.Channel.GetAnalogInputsAsync(sortType);
         }
         
-        public string[] DisplayDigitalInputs(string sortType) {
-            return base.Channel.DisplayDigitalInputs(sortType);
+        public string[] GetDigitalInputs(string sortType) {
+            return base.Channel.GetDigitalInputs(sortType);
         }
         
-        public System.Threading.Tasks.Task<string[]> DisplayDigitalInputsAsync(string sortType) {
-            return base.Channel.DisplayDigitalInputsAsync(sortType);
+        public System.Threading.Tasks.Task<string[]> GetDigitalInputsAsync(string sortType) {
+            return base.Channel.GetDigitalInputsAsync(sortType);
         }
         
-        public string[] DisplayTagById(string tagName, string sortType) {
-            return base.Channel.DisplayTagById(tagName, sortType);
+        public string[] GetTagValuesByName(string tagName, string sortType) {
+            return base.Channel.GetTagValuesByName(tagName, sortType);
         }
         
-        public System.Threading.Tasks.Task<string[]> DisplayTagByIdAsync(string tagName, string sortType) {
-            return base.Channel.DisplayTagByIdAsync(tagName, sortType);
+        public System.Threading.Tasks.Task<string[]> GetTagValuesByNameAsync(string tagName, string sortType) {
+            return base.Channel.GetTagValuesByNameAsync(tagName, sortType);
         }
     }
 }

@@ -55,6 +55,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Connected Services\ServiceReference\ReportManager.ServiceReference.AlarmValue.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Connected Services\ServiceReference\ReportManagerService.wsdl" />
     <None Include="Connected Services\ServiceReference\ReportManagerService.xsd">
       <SubType>Designer</SubType>
@@ -63,6 +66,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Connected Services\ServiceReference\ReportManagerService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\ServiceReference\ReportManagerService3.xsd">
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>

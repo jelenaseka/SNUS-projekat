@@ -12,21 +12,21 @@ namespace ScadaCore
     public interface IReportManagerService
     {
         [OperationContract]
-        List<string> DisplayAlarmsByDate(DateTime dateFrom, DateTime dateTo, string sortBy, string sortType);
+        List<AlarmValue> GetAlarmsByDateRange(DateTime dateFrom, DateTime dateTo, string sortBy, string sortType);
 
         [OperationContract]
-        List<string> DisplayAlarmsByPriority(int priority, string sortType);
+        List<string> GetAlarmsByPriority(int priority, string sortType);
 
         [OperationContract]
-        List<string> DisplayTagsByDate(DateTime dateFrom, DateTime dateTo, string sortType);
+        List<string> GetTagsByDateRange(DateTime dateFrom, DateTime dateTo, string sortType);
 
         [OperationContract]
-        List<string> DisplayAnalogInputs(string sortType);
+        List<string> GetAnalogInputs(string sortType);
 
         [OperationContract]
-        List<string> DisplayDigitalInputs(string sortType);
+        List<string> GetDigitalInputs(string sortType);
 
         [OperationContract]
-        List<string> DisplayTagById(string tagName, string sortType);
+        List<string> GetTagValuesByName(string tagName, string sortType);
     }
 }

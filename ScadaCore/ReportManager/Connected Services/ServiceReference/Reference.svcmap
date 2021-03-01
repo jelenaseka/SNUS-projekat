@@ -22,11 +22,12 @@
     <MetadataSource Address="http://localhost:58140/ReportManagerService.svc" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
+    <MetadataFile FileName="ReportManagerService2.xsd" MetadataType="Schema" ID="3281e38d-a4b4-4b11-a34d-12a398bd23c9" SourceId="1" SourceUrl="http://localhost:58140/ReportManagerService.svc?xsd=xsd1" />
+    <MetadataFile FileName="ReportManagerService1.xsd" MetadataType="Schema" ID="31ed9a15-d6e3-4442-a326-2aa17d5c7b7d" SourceId="1" SourceUrl="http://localhost:58140/ReportManagerService.svc?xsd=xsd2" />
     <MetadataFile FileName="ReportManagerService.xsd" MetadataType="Schema" ID="80ec2dbe-c7e7-41ed-a52f-1627a3c11406" SourceId="1" SourceUrl="http://localhost:58140/ReportManagerService.svc?xsd=xsd0" />
     <MetadataFile FileName="ReportManagerService.wsdl" MetadataType="Wsdl" ID="b5120801-de6c-4217-8ebe-1208abc5bf67" SourceId="1" SourceUrl="http://localhost:58140/ReportManagerService.svc?wsdl" />
-    <MetadataFile FileName="ReportManagerService1.xsd" MetadataType="Schema" ID="31ed9a15-d6e3-4442-a326-2aa17d5c7b7d" SourceId="1" SourceUrl="http://localhost:58140/ReportManagerService.svc?xsd=xsd2" />
     <MetadataFile FileName="ReportManagerService.disco" MetadataType="Disco" ID="ce82f8fb-59e9-426d-a40c-a0add8a5b2aa" SourceId="1" SourceUrl="http://localhost:58140/ReportManagerService.svc?disco" />
-    <MetadataFile FileName="ReportManagerService2.xsd" MetadataType="Schema" ID="3281e38d-a4b4-4b11-a34d-12a398bd23c9" SourceId="1" SourceUrl="http://localhost:58140/ReportManagerService.svc?xsd=xsd1" />
+    <MetadataFile FileName="ReportManagerService3.xsd" MetadataType="Schema" ID="923f5ddb-6bc0-4a14-9885-935cafbfb1a9" SourceId="1" SourceUrl="http://localhost:58140/ReportManagerService.svc?xsd=xsd3" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

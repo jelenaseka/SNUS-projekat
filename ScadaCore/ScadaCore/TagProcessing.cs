@@ -97,17 +97,23 @@ namespace ScadaCore
 
         public static void DoWork(Input input)
         {
-            //input.OldValue = -100;
+            bool firstIteration;
+            double currentValue;
+            lock (locker)
+            {
+                firstIteration = true;
+                currentValue = -100;
+            }
             while (true)
             {
                 bool onOffScan = inputTags[input.TagName].OnOffScan;
                 if (onOffScan)
                 {
                     double value = ReadValueFromDriver(input);
-                    
+
                     lock (locker)
                     {
-                        
+
                         if (input.GetType() == typeof(AnalogInput))
                         {
                             AnalogInput ai = (AnalogInput)input;
@@ -115,20 +121,28 @@ namespace ScadaCore
                             value = value < ai.LowLimit ? ai.LowLimit : value;
                             value = value > ai.HighLimit ? ai.HighLimit : value;
 
-                            
+
                             CheckAlarm(input, value);
                         } else
                         {
                             value = value < 0.5 ? 0 : 1;
                         }
-                        //if(value != input.OldValue)
-                        //{
-                        //    input.OldValue = value;
-                            TagValue tagValue = new TagValue { TagName = input.TagName, Time = DateTime.Now, Value = value, Tag = "input", Type = input.Type };
-                            databaseContext.Values.Add(tagValue);
-                        //}
-                    }
+                        if (firstIteration)
+                        {
+                            currentValue = value;
+                        } else
+                        {
+                            if (value != currentValue)
+                            {
+                                TagValue tagValue = new TagValue { TagName = input.TagName, Time = DateTime.Now, Value = value, Tag = "input", Type = input.Type };
+                                databaseContext.Values.Add(tagValue);
+                                currentValue = value;
+                            } 
+                        }
+                        firstIteration = false;
 
+                    }
+                    
                     InvokeInputChanged(input.TagName, value);
                 }
 

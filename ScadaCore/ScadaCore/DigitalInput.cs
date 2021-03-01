@@ -12,7 +12,6 @@ namespace ScadaCore
         public string Description { get; set; }
         public string Driver { get; set; }
         public string IOAddress { get; set; }
-        public double OldValue { get; set; }
         public int ScanTime { get; set; }
         public bool OnOffScan { get; set; }
         public string Type { get; set; }

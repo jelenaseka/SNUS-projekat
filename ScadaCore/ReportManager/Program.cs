@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ReportManager.ServiceReference;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,14 +14,9 @@ namespace ReportManager
         {
             while(true)
             {
-                OptionsMenu();
+                PrintOptionsMenu();
+                ExecuteOptionsMenu();
             }
-        }
-        private static void OptionsMenu()
-        {
-            PrintOptionsMenu();
-            int option = ChoseOption();
-            ExecuteOptionsMenu(option);
         }
 
         private static void PrintOptionsMenu()
@@ -43,13 +39,14 @@ namespace ReportManager
                 success = Int32.TryParse(Console.ReadLine(), out chosen);
                 if (!success)
                 {
-                    Console.WriteLine("Pogresan unos. Pokusajte ponovo");
+                    Console.WriteLine("Pogresan format unosa. Pokusajte ponovo");
                 }
             }
             return chosen;
         }
-        private static void ExecuteOptionsMenu(int option)
-        {
+        private static void ExecuteOptionsMenu()
+        {        
+            int option = ChoseOption();
             switch (option)
             {
                 case 0: System.Environment.Exit(1); break;
@@ -59,7 +56,12 @@ namespace ReportManager
                 case 4: DisplayAnalogInputs(); break;
                 case 5: DisplayDigitalInputs(); break;
                 case 6: DisplayTagById(); break;
-                default: Console.WriteLine("Pogresan unos"); break;
+                default:
+                    {
+                        Console.WriteLine("Nepostojeca opcija!\nUnesite opciju: ");
+                        ExecuteOptionsMenu();
+                        break;
+                    }
             }
         }
 
@@ -68,27 +70,27 @@ namespace ReportManager
             string sortType = Console.ReadLine();
             if (sortType == "1")
                 return "asc";
-            else if (sortType == "2")
+            if (sortType == "2")
                 return "desc";
-            else
-            {
-                return "error";
-            }
+            
+            return "error";
+           
         }
         private static void DisplayTagById()
         {
             Console.WriteLine("Unesite id taga:");
             string tagName = Console.ReadLine();
+            
             Console.WriteLine("Sortiraj po vrednosti: 1. Rastuce, 2. Opadajuce");
-
             string sortType = GetSortType();
+            
             if(sortType == "error")
             {
                 Console.WriteLine("Pogresan unos.");
                 return;
             }
 
-            string[] tags = reportManagerClient.DisplayTagById(tagName, sortType);
+            string[] tags = reportManagerClient.GetTagValuesByName(tagName, sortType);
             DisplayTags(tags);
         }
 
@@ -125,9 +127,13 @@ namespace ReportManager
             
             if (DateTime.TryParse(dateFrom, out dateFromValue) && DateTime.TryParse(dateTo, out dateToValue))
             {
-                string[] alarms = reportManagerClient.DisplayAlarmsByDate(dateFromValue, dateToValue, sortParam, sortType);
-                foreach (var alarm in alarms)
-                    Console.WriteLine(alarm);
+                AlarmValue[] alarms = reportManagerClient.GetAlarmsByDateRange(dateFromValue, dateToValue, sortParam, sortType);
+                foreach(var alarm in alarms)
+                {
+                    Console.WriteLine($"Tag name: {alarm.TagName}, Limit: {alarm.Limit}, Trigger value: {alarm.TriggerValue}, Priority: {alarm.Priority}, Time: {alarm.Time}");
+                }
+                //foreach (var alarm in alarms)
+                //    Console.WriteLine(alarm);
             }
             else
             {
@@ -147,7 +153,7 @@ namespace ReportManager
                 return;
             }
 
-            string[] tags = reportManagerClient.DisplayDigitalInputs(sortType);
+            string[] tags = reportManagerClient.GetDigitalInputs(sortType);
             DisplayTags(tags);
         }
         private static void DisplayAnalogInputs()
@@ -160,7 +166,7 @@ namespace ReportManager
                 Console.WriteLine("Pogresan unos.");
                 return;
             }
-            string[] tags = reportManagerClient.DisplayAnalogInputs(sortType);
+            string[] tags = reportManagerClient.GetAnalogInputs(sortType);
             DisplayTags(tags);
         }
 
@@ -184,7 +190,7 @@ namespace ReportManager
                     Console.WriteLine("Pogresan unos.");
                     return;
                 }
-                string[] alarms = reportManagerClient.DisplayAlarmsByPriority(priority, sortType);
+                string[] alarms = reportManagerClient.GetAlarmsByPriority(priority, sortType);
                 foreach(var alarm in alarms)
                     Console.WriteLine(alarm);
             } else
@@ -216,7 +222,7 @@ namespace ReportManager
                     Console.WriteLine("Pogresan unos.");
                     return;
                 }
-                string[] tags = reportManagerClient.DisplayTagsByDate(dateFromValue, dateToValue, sortType);
+                string[] tags = reportManagerClient.GetTagsByDateRange(dateFromValue, dateToValue, sortType);
                 DisplayTags(tags);
             } else
             {
